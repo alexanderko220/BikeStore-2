@@ -1,0 +1,25 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Provide sufficient contrast against white background */
+@import "../node_modules/bootstrap/dist/css/bootstrap.css";
+@import "~@angular/material/prebuilt-themes/purple-green.css";
+
+/*
+*
+* ==========================================
+* CUSTOM UTIL CLASSES
+* ==========================================
+*
+*/
+body {
+  background-color: #6e6e6e;
+}
+.megamenu {
+  position: static;
+}
+
+  .megamenu .dropdown-menu {
+    background: none;
+    border: none;
+    width: 100%;
+  }
