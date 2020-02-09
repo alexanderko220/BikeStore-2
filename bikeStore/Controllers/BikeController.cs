@@ -33,5 +33,15 @@ namespace bikeStore.Controllers
                 return Ok(_mapper.Map<IEnumerable<Bike>, IEnumerable<BikeDTO>>(bikes));
             else return NotFound();
         }
+
+        [HttpGet]
+        [Route("bike/{bikeId}")]
+        public async Task<IActionResult> GetBike(long bikeId)
+        {
+            var bike = await _bikeRepository.GetBikeAsync(bikeId);
+            if (bike != null)
+                return Ok(bike);
+            else return NotFound();
+        }
     }
 }

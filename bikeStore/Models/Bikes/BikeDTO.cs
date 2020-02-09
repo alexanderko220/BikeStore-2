@@ -14,7 +14,7 @@ namespace BikeStore.Models.Bikes
         public IEnumerable<IdValue> BColors { get; set; }
         public bool IsInStock { get; set; }
         public decimal? BPrice { get; set; }
-        public string BThumbImgContent { get; set; }
+        public byte[] BThumbImgContent { get; set; }
         public long BCategoryId { get; set; }
         public long BImgId { get; set; }
         

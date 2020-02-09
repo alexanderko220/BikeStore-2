@@ -12,14 +12,7 @@
 *
 */
 body {
-  background-color: #6e6e6e;
-}
-.megamenu {
-  position: static;
+  background-color: black;
+  margin-top: 100px;
 }
 
-  .megamenu .dropdown-menu {
-    background: none;
-    border: none;
-    width: 100%;
-  }

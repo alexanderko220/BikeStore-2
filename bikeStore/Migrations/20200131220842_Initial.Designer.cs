@@ -10,8 +10,8 @@ using bikeStore.Data;
 namespace BikeStore.Migrations
 {
     [DbContext(typeof(StoreDbContext))]
-    [Migration("20191201091315_InitialDb")]
-    partial class InitialDb
+    [Migration("20200131220842_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -3,7 +3,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
 import { CdkTableModule } from '@angular/cdk/table';
 import { CdkTreeModule } from '@angular/cdk/tree';
 import 'hammerjs';
@@ -49,9 +48,10 @@ import {
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
-import { BikeMenuComponent } from './bike-menu/bike-menu.component';
-import { RefDirective } from "./directives/ref.directive";
 import { AppRoutingModule } from './app.routing.module';
+import { BikeCategoryComponent } from './bike-category/bike-category.component';
+import { MenuCategoryPipePipe } from './pipes/menu-category-pipe.pipe';
+import { BikeComponent } from './bike/bike.component';
 
 
 @NgModule({
@@ -59,8 +59,9 @@ import { AppRoutingModule } from './app.routing.module';
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    BikeMenuComponent,
-    RefDirective
+    BikeCategoryComponent,
+    MenuCategoryPipePipe,
+    BikeComponent
 
   ],
   imports: [
@@ -113,7 +114,6 @@ import { AppRoutingModule } from './app.routing.module';
     CdkTreeModule
   ],
   providers: [],
-  entryComponents: [BikeMenuComponent],
   bootstrap: [AppComponent]
 
 })

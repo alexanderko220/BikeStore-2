@@ -1,33 +1,92 @@
+<!-- Navbar -->
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark special-color-dark">
 
+  <!-- Navbar brand -->
+  <a class="navbar-brand text-uppercase" href="#">BikeStore</a>
 
-<nav class="navbar-dark bg-dark navbar-expand-lg py-3 shadow-sm">
-  <a href="#" class="navbar-brand font-weight-bold d-block d-lg-none text-white">BikeStore</a>
-  <button type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbars" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler">
+  <!-- Collapse button -->
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent2"
+          aria-controls="navbarSupportedContent2" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <div id="navbarContent" class="collapse navbar-collapse">
-    <ul class="navbar-nav mx-auto">
-     
-<li class="nav-item dropdown megamenu">
-  <a id="megamneu" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle font-weight-bold text-uppercase">Bikes</a>
-  <div aria-labelledby="megamneu" class="dropdown-menu border-0 p-0 m-0">
-    <div class="container">
-      <div class="row bg-dark rounded-0 m-0 shadow-sm">
-        <div class="col-lg-11 col-xl-12">
-          <div class="p-4">
-            <ng-template  menuRef></ng-template>
+
+  <!-- Collapsible content -->
+  <div class="collapse navbar-collapse" id="navbarSupportedContent2">
+
+    <!-- Links -->
+    <ul class="navbar-nav mr-auto">
+
+      <!-- Bikes -->
+      <!--[ngClass]="{'show': flags.isBikesHover}" (mouseover)="onHover('isBikesHover')" (mouseout)="onHover('isBikesHover')"-->
+      <li class="nav-item dropdown mega-dropdown">
+        <a class="nav-link text-uppercase" id="navbarDropdownMenuLink2" data-toggle="dropdown"
+           aria-haspopup="true" aria-expanded="false">
+          Bikes
+          <span class="sr-only">(current)</span>
+        </a>
+        <div class="dropdown-menu mega-menu v-2 z-depth-1 special-color py-5 px-3" aria-labelledby="navbarDropdownMenuLink2">
+          <div class="row">
+            <div class="col-lg-6 col-xl-8 mx-auto">
+              <div class="p-4">
+                <!--<ng-template menuRef></ng-template>-->
+                <div class="row">
+                  
+                    <div *ngFor="let cat of mainCatList" class="col-lg-3 mb-4">
+                      <h6 class="text-white font-weight-bold text-uppercase">{{cat.catName}}</h6>
+                      <ul class="list-unstyled">
+                        <li routerLinkActive="active" class="nav-item" *ngFor="let subCat of categories | menuCategoryPipe:cat.catId">
+                          <a [routerLink]="['/bikes/category', subCat.catId]" class="nav-link text-small pb-0">{{subCat.catName}}</a>
+                        </li>
+                      </ul>
+                    </div>
+                  
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-       
-      </div>
-    </div>
-  </div>
-</li>
-<li class="nav-item"><a href="" class="nav-link font-weight-bold text-uppercase">About</a></li>
-<li class="nav-item"><a href="" class="nav-link font-weight-bold text-uppercase">Services</a></li>
-<li class="nav-item"><a href="" class="nav-link font-weight-bold text-uppercase">Contact</a></li>
+      </li>
+      <!-- About -->
+      <li class="nav-item dropdown mega-dropdown">
+        <a class="nav-link text-uppercase" id="navbarDropdownMenuLink3" data-toggle="dropdown"
+           aria-haspopup="true" aria-expanded="false">About</a>
+        <div class="dropdown-menu mega-menu v-2 z-depth-1 special-color py-5 px-3" aria-labelledby="navbarDropdownMenuLink3">
+          <div class="row">
+
+          </div>
+        </div>
+      </li>
+      <!-- Services -->
+      <li class="nav-item dropdown mega-dropdown">
+        <a class="nav-link text-uppercase" id="navbarDropdownMenuLink4" data-toggle="dropdown"
+           aria-haspopup="true" aria-expanded="false">Services</a>
+        <div class="dropdown-menu mega-menu v-2 z-depth-1 special-color py-5 px-3" aria-labelledby="navbarDropdownMenuLink4">
+          <div class="row">
+
+          </div>
+        </div>
+      </li>
+      <!-- Contact -->
+      <li class="nav-item dropdown mega-dropdown">
+        <a class="nav-link text-uppercase" id="navbarDropdownMenuLink4" data-toggle="dropdown"
+           aria-haspopup="true" aria-expanded="false">Contact</a>
+        <div class="dropdown-menu mega-menu v-2 z-depth-1 special-color py-5 px-3" aria-labelledby="navbarDropdownMenuLink4">
+          <div class="row">
+
+          </div>
+        </div>
+      </li>
+
     </ul>
+    <!-- Links -->
+    <!-- Search form -->
+    <form class="form-inline">
+      <div class="md-form my-0">
+        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+      </div>
+    </form>
+
   </div>
+  <!-- Collapsible content -->
+
 </nav>
-
-
