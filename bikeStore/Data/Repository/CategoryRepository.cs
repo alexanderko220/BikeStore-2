@@ -3,9 +3,11 @@ using bikeStore.Data.Entities;
 using bikeStore.Data.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace BikeStore.Data.Repository
@@ -105,6 +107,20 @@ namespace BikeStore.Data.Repository
             catch (Exception ex)
             {
                 _logger.LogError($"Failed to delete Category: {ex}");
+                throw;
+            }
+        }
+
+        public Task<IEnumerable<Category>> GetCategoriesByConditionAsync(Expression<Func<Category, bool>> expression)
+        {
+            try
+            {
+                _logger.LogInformation($"Try to get category range by  {JsonConvert.SerializeObject(expression.Parameters)}");
+                return GetRangeByConditionAsync(expression);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to get category range: {ex}");
                 throw;
             }
         }

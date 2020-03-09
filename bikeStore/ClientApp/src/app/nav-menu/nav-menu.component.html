@@ -2,7 +2,7 @@
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark special-color-dark">
 
   <!-- Navbar brand -->
-  <a class="navbar-brand text-uppercase" href="#">BikeStore</a>
+  <a class="navbar-brand text-uppercase" [routerLink]="['']">BikeStore</a>
 
   <!-- Collapse button -->
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent2"
@@ -17,60 +17,76 @@
     <ul class="navbar-nav mr-auto">
 
       <!-- Bikes -->
-      <!--[ngClass]="{'show': flags.isBikesHover}" (mouseover)="onHover('isBikesHover')" (mouseout)="onHover('isBikesHover')"-->
-      <li class="nav-item dropdown mega-dropdown">
+      <li class="nav-item dropdown mega-dropdown" [ngClass]="{'show': flags.isBikesHover}" (mouseover)="onHover('isBikesHover', true)">
         <a class="nav-link text-uppercase" id="navbarDropdownMenuLink2" data-toggle="dropdown"
            aria-haspopup="true" aria-expanded="false">
           Bikes
           <span class="sr-only">(current)</span>
         </a>
-        <div class="dropdown-menu mega-menu v-2 z-depth-1 special-color py-5 px-3" aria-labelledby="navbarDropdownMenuLink2">
+        <div class="dropdown-menu mega-menu v-2 z-depth-1 special-color py-5 px-3" [ngClass]="{'show': flags.isBikesHover}" aria-labelledby="navbarDropdownMenuLink2" (mouseout)="onHover('isBikesHover', false)">
           <div class="row">
             <div class="col-lg-6 col-xl-8 mx-auto">
               <div class="p-4">
                 <!--<ng-template menuRef></ng-template>-->
                 <div class="row">
-                  
-                    <div *ngFor="let cat of mainCatList" class="col-lg-3 mb-4">
-                      <h6 class="text-white font-weight-bold text-uppercase">{{cat.catName}}</h6>
-                      <ul class="list-unstyled">
-                        <li routerLinkActive="active" class="nav-item" *ngFor="let subCat of categories | menuCategoryPipe:cat.catId">
-                          <a [routerLink]="['/bikes/category', subCat.catId]" class="nav-link text-small pb-0">{{subCat.catName}}</a>
-                        </li>
-                      </ul>
-                    </div>
-                  
+                  <div *ngFor="let cat of mainCatList" class="col-lg-3 mb-4">
+                    <h6 class="text-white font-weight-bold text-uppercase">{{cat.catName}}</h6>
+                    <ul class="list-unstyled">
+                      <li routerLinkActive="active" class="nav-item" *ngFor="let subCat of categories | menuCategoryPipe:cat.catId">
+                        <a [routerLink]="['/bikes/category', subCat.catId]" (click)="closeAllNavs()" class="nav-link text-small pb-0">{{subCat.catName}}</a>
+                      </li>
+                    </ul>
+                  </div>
+
                 </div>
               </div>
             </div>
           </div>
         </div>
+
       </li>
       <!-- About -->
-      <li class="nav-item dropdown mega-dropdown">
+      <li class="nav-item dropdown mega-dropdown"
+          (mouseover)="onHover('isAboutHover', true)"
+          [ngClass]="{'show': flags.isAboutHover}">
         <a class="nav-link text-uppercase" id="navbarDropdownMenuLink3" data-toggle="dropdown"
            aria-haspopup="true" aria-expanded="false">About</a>
-        <div class="dropdown-menu mega-menu v-2 z-depth-1 special-color py-5 px-3" aria-labelledby="navbarDropdownMenuLink3">
+        <div class="dropdown-menu mega-menu v-2 z-depth-1 special-color py-5 px-3"
+             aria-labelledby="navbarDropdownMenuLink3"
+             (mouseout)="onHover('isAboutHover', false)"
+             [ngClass]="{'show': flags.isAboutHover}">
           <div class="row">
 
           </div>
         </div>
       </li>
       <!-- Services -->
-      <li class="nav-item dropdown mega-dropdown">
+      <li class="nav-item dropdown mega-dropdown"
+          (mouseover)="onHover('isServicesHover', true)"
+          [ngClass]="{'show': flags.isServicesHover}">
         <a class="nav-link text-uppercase" id="navbarDropdownMenuLink4" data-toggle="dropdown"
            aria-haspopup="true" aria-expanded="false">Services</a>
-        <div class="dropdown-menu mega-menu v-2 z-depth-1 special-color py-5 px-3" aria-labelledby="navbarDropdownMenuLink4">
+        <div class="dropdown-menu mega-menu v-2 z-depth-1 special-color py-5 px-3"
+             aria-labelledby="navbarDropdownMenuLink4"
+             (mouseout)="onHover('isServicesHover', false)"
+             [ngClass]="{'show': flags.isServicesHover}">
           <div class="row">
 
           </div>
         </div>
       </li>
       <!-- Contact -->
-      <li class="nav-item dropdown mega-dropdown">
-        <a class="nav-link text-uppercase" id="navbarDropdownMenuLink4" data-toggle="dropdown"
+      <li class="nav-item dropdown mega-dropdown"
+          (mouseover)="onHover('isContactHover', true)"
+          [ngClass]="{'show': flags.isContactHover}">
+        <a class="nav-link text-uppercase"
+           id="navbarDropdownMenuLink4"
+           data-toggle="dropdown"
            aria-haspopup="true" aria-expanded="false">Contact</a>
-        <div class="dropdown-menu mega-menu v-2 z-depth-1 special-color py-5 px-3" aria-labelledby="navbarDropdownMenuLink4">
+        <div class="dropdown-menu mega-menu v-2 z-depth-1 special-color py-5 px-3"
+             aria-labelledby="navbarDropdownMenuLink4"
+             (mouseout)="onHover('isContactHover', false)"
+             [ngClass]="{'show': flags.isContactHover}">
           <div class="row">
 
           </div>
@@ -80,6 +96,12 @@
     </ul>
     <!-- Links -->
     <!-- Search form -->
+    <ul class="navbar-nav ml-auto mr-lg-5">
+      <li class="nav-item">
+        <a  routerLinkActive="active" [routerLink]="['/admin']" (click)="closeAllNavs()" class="nav-link text-small pb-0">ADMIN</a>
+      </li>
+    </ul>
+    <!-- <a [routerLink]="['/bikes/category', subCat.catId]" (click)="closeAllNavs()" class="nav-link text-small pb-0">{{subCat.catName}}</a>-->
     <form class="form-inline">
       <div class="md-form my-0">
         <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">

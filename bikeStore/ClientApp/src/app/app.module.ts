@@ -1,10 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CdkTableModule } from '@angular/cdk/table';
 import { CdkTreeModule } from '@angular/cdk/tree';
+import { AgGridModule } from 'ag-grid-angular';
 import 'hammerjs';
 //#region angular material components
 import {
@@ -43,6 +44,7 @@ import {
   MatToolbarModule,
   MatTooltipModule,
   MatTreeModule,
+  MatFormFieldModule,
 } from '@angular/material';
 //#endregion
 import { AppComponent } from './app.component';
@@ -52,6 +54,8 @@ import { AppRoutingModule } from './app.routing.module';
 import { BikeCategoryComponent } from './bike-category/bike-category.component';
 import { MenuCategoryPipePipe } from './pipes/menu-category-pipe.pipe';
 import { BikeComponent } from './bike/bike.component';
+import { AdminComponent } from './admin/admin.component';
+import { AdminModalComponent } from './admin/admin-modal/admin-modal.component';
 
 
 @NgModule({
@@ -61,15 +65,19 @@ import { BikeComponent } from './bike/bike.component';
     HomeComponent,
     BikeCategoryComponent,
     MenuCategoryPipePipe,
-    BikeComponent
+    BikeComponent,
+    AdminComponent,
+    AdminModalComponent
 
   ],
+  entryComponents: [AdminModalComponent],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
     AppRoutingModule,
+    ReactiveFormsModule,
     //RouterModule.forRoot([
     //  { path: '', component: HomeComponent, pathMatch: 'full' },
     //  { path: 'counter', component: CounterComponent },
@@ -111,7 +119,9 @@ import { BikeComponent } from './bike/bike.component';
     MatTooltipModule,
     MatTreeModule,
     CdkTableModule,
-    CdkTreeModule
+    CdkTreeModule,
+    MatFormFieldModule,
+    AgGridModule.withComponents([])
   ],
   providers: [],
   bootstrap: [AppComponent]

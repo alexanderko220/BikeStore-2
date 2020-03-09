@@ -25,7 +25,7 @@ namespace bikeStore.Data.Repository
             {
                 _logger.LogInformation($"run GetBikesByCategoryAsync, catId = {catId}");
                 //return await GetRangeByConditionAsync(x => x.BCategoryId == catId && x.IsInStock == true);
-                return await GetWithInclude(x => x.BCategoryId == catId && x.IsInStock == true, z => z.BikeJunctions);
+                return await GetWithInclude(x => x.CategoryId == catId && x.IsInStock == true);
             }
             catch (Exception ex)
             {
@@ -39,10 +39,11 @@ namespace bikeStore.Data.Repository
             try
             {
                 _logger.LogInformation($"GetBikeAsync id={id}");
-                return await _context.Bikes.Where(x => x.BId == id)
-                    .Include(x => x.BikeJunctions)
-                    .Include(s => s.BikeSpecJunctions)
-                    .Include(i => i.BImages).ThenInclude(c => c.SIImeges)
+                return await _context.Bikes.Where(x => x.BikeId == id)
+                    .Include(s => s.Specifications).ThenInclude(i => i.Specification)
+                    .Include(c => c.ColorSize).ThenInclude(s => s.Size)
+                    .Include(c => c.ColorSize).ThenInclude(s => s.Color)
+                    .Include(i => i.Images).ThenInclude(c => c.ImgContents)
                     .FirstOrDefaultAsync();
             }
             catch (Exception ex)
@@ -71,7 +72,7 @@ namespace bikeStore.Data.Repository
             try
             {
                 _logger.LogInformation("run GetBikesAsync");
-                return await GetRangeByConditionAsync(x => bikeIds.Contains(x.BId));
+                return await GetRangeByConditionAsync(x => bikeIds.Contains(x.BikeId));
             }
             catch (Exception ex)
             {
@@ -132,7 +133,7 @@ namespace bikeStore.Data.Repository
                 {
                     throw new ArgumentNullException(nameof(bike));
                 }
-                _logger.LogInformation($"Try to update bike id = {bike.BId}");
+                _logger.LogInformation($"Try to update bike id = {bike.BikeId}");
                 Update(bike);
 
             }
@@ -173,7 +174,7 @@ namespace bikeStore.Data.Repository
                 {
                     throw new ArgumentNullException(nameof(bike));
                 }
-                _logger.LogInformation($"Try to delete bike id= {bike.BId}");
+                _logger.LogInformation($"Try to delete bike id= {bike.BikeId}");
                 Delete(bike);
 
             }

@@ -7,13 +7,13 @@ namespace bikeStore.Data.Entities
     {
         [Key]
         public long SpecId { get; set; }
-        public string SpecType { get; set; }
-        public string SpecBrand { get; set; }
-        public string SpecModel { get; set; }
-        public string SpecDescr { get; set; }
+        public string Type { get; set; }
+        public string Brand { get; set; }
+        public string Model { get; set; }
+        public string Description { get; set; }
         public long SpecCatId { get; set; }
         public SpecificationCategory SpecCategory { get; set; }
-        public IEnumerable<BikeSpecJunction> BikeSpecJunctions { get; set; }
+        public IEnumerable<BikesSpecifications> BikesSpecifications { get; set; }
 
     }
 }

@@ -19,415 +19,431 @@ namespace BikeStore.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("BikeStore.Data.Entities.BikeJunction", b =>
+            modelBuilder.Entity("BikeStore.Data.Entities.BikesColorSize", b =>
                 {
-                    b.Property<long>("BJId")
+                    b.Property<long>("BikeId");
+
+                    b.Property<long>("ColorId");
+
+                    b.Property<long>("SizeId");
+
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long>("BId");
+                    b.HasKey("BikeId", "ColorId", "SizeId");
 
-                    b.Property<int>("BJColor");
+                    b.HasAlternateKey("Id");
 
-                    b.Property<int>("BJSize");
+                    b.HasIndex("ColorId");
 
-                    b.HasKey("BJId");
+                    b.HasIndex("SizeId");
 
-                    b.HasIndex("BId");
+                    b.ToTable("BikesColorSize");
+                });
 
-                    b.ToTable("BikeJunction");
+            modelBuilder.Entity("BikeStore.Data.Entities.Color", b =>
+                {
+                    b.Property<long>("ColorId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.HasData(
-                        new
-                        {
-                            BJId = 1L,
-                            BId = 1L,
-                            BJColor = 1,
-                            BJSize = 2
-                        },
-                        new
-                        {
-                            BJId = 2L,
-                            BId = 2L,
-                            BJColor = 2,
-                            BJSize = 2
-                        });
+                    b.Property<string>("ColorName");
+
+                    b.Property<string>("ColorValue");
+
+                    b.HasKey("ColorId");
+
+                    b.ToTable("Color");
+                });
+
+            modelBuilder.Entity("BikeStore.Data.Entities.Size", b =>
+                {
+                    b.Property<long?>("SizeId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("SizeName");
+
+                    b.Property<string>("SizeValue");
+
+                    b.HasKey("SizeId");
+
+                    b.ToTable("Size");
                 });
 
             modelBuilder.Entity("bikeStore.Data.Entities.Bike", b =>
                 {
-                    b.Property<long>("BId")
+                    b.Property<long>("BikeId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("BBrand");
+                    b.Property<string>("Brand");
 
-                    b.Property<long>("BCategoryId");
+                    b.Property<long>("CategoryId");
 
-                    b.Property<long?>("BImagesSIId");
+                    b.Property<long?>("ImagesStoreImgId");
 
-                    b.Property<long>("BImgId");
-
-                    b.Property<string>("BModel");
-
-                    b.Property<decimal?>("BPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<byte[]>("BThumbImgContent");
+                    b.Property<long>("ImgId");
 
                     b.Property<bool>("IsInStock");
 
-                    b.HasKey("BId");
+                    b.Property<string>("Model");
 
-                    b.HasIndex("BCategoryId");
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.HasIndex("BImagesSIId");
+                    b.Property<byte[]>("ThumbImgContent");
+
+                    b.HasKey("BikeId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("ImagesStoreImgId");
 
                     b.ToTable("Bikes");
 
                     b.HasData(
                         new
                         {
-                            BId = 1L,
-                            BBrand = "Specialized",
-                            BCategoryId = 5L,
-                            BImgId = 0L,
-                            BModel = "S-Works Epic AXS",
-                            BPrice = 1299.6m,
-                            IsInStock = true
+                            BikeId = 1L,
+                            Brand = "Specialized",
+                            CategoryId = 5L,
+                            ImgId = 0L,
+                            IsInStock = true,
+                            Model = "S-Works Epic AXS",
+                            Price = 1299.6m
                         },
                         new
                         {
-                            BId = 2L,
-                            BBrand = "Specialized",
-                            BCategoryId = 5L,
-                            BImgId = 0L,
-                            BModel = "Epic Pro",
-                            BPrice = 899.5m,
-                            IsInStock = true
+                            BikeId = 2L,
+                            Brand = "Specialized",
+                            CategoryId = 5L,
+                            ImgId = 0L,
+                            IsInStock = true,
+                            Model = "Epic Pro",
+                            Price = 899.5m
                         });
                 });
 
-            modelBuilder.Entity("bikeStore.Data.Entities.BikeSpecJunction", b =>
+            modelBuilder.Entity("bikeStore.Data.Entities.BikesSpecifications", b =>
                 {
-                    b.Property<long>("BSJId")
+                    b.Property<long>("BikeId");
+
+                    b.Property<long>("SpecificationId");
+
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long>("BSJBikeId");
+                    b.HasKey("BikeId", "SpecificationId");
 
-                    b.Property<long>("BSJSpecId");
+                    b.HasAlternateKey("Id");
 
-                    b.Property<long?>("BSJSpecificationSpecId");
+                    b.HasIndex("SpecificationId");
 
-                    b.HasKey("BSJId");
-
-                    b.HasIndex("BSJBikeId");
-
-                    b.HasIndex("BSJSpecificationSpecId");
-
-                    b.ToTable("BikeSpecJunction");
+                    b.ToTable("BikesSpecifications");
 
                     b.HasData(
                         new
                         {
-                            BSJId = 1L,
-                            BSJBikeId = 1L,
-                            BSJSpecId = 1L
+                            BikeId = 1L,
+                            SpecificationId = 1L,
+                            Id = 1L
                         },
                         new
                         {
-                            BSJId = 2L,
-                            BSJBikeId = 1L,
-                            BSJSpecId = 2L
+                            BikeId = 1L,
+                            SpecificationId = 2L,
+                            Id = 2L
                         },
                         new
                         {
-                            BSJId = 3L,
-                            BSJBikeId = 1L,
-                            BSJSpecId = 3L
+                            BikeId = 1L,
+                            SpecificationId = 3L,
+                            Id = 3L
                         },
                         new
                         {
-                            BSJId = 4L,
-                            BSJBikeId = 1L,
-                            BSJSpecId = 4L
+                            BikeId = 1L,
+                            SpecificationId = 4L,
+                            Id = 4L
                         },
                         new
                         {
-                            BSJId = 5L,
-                            BSJBikeId = 1L,
-                            BSJSpecId = 5L
+                            BikeId = 1L,
+                            SpecificationId = 5L,
+                            Id = 5L
                         },
                         new
                         {
-                            BSJId = 6L,
-                            BSJBikeId = 1L,
-                            BSJSpecId = 6L
+                            BikeId = 1L,
+                            SpecificationId = 6L,
+                            Id = 6L
                         },
                         new
                         {
-                            BSJId = 7L,
-                            BSJBikeId = 1L,
-                            BSJSpecId = 7L
+                            BikeId = 1L,
+                            SpecificationId = 7L,
+                            Id = 7L
                         },
                         new
                         {
-                            BSJId = 8L,
-                            BSJBikeId = 1L,
-                            BSJSpecId = 8L
+                            BikeId = 1L,
+                            SpecificationId = 8L,
+                            Id = 8L
                         },
                         new
                         {
-                            BSJId = 9L,
-                            BSJBikeId = 1L,
-                            BSJSpecId = 9L
+                            BikeId = 1L,
+                            SpecificationId = 9L,
+                            Id = 9L
                         },
                         new
                         {
-                            BSJId = 10L,
-                            BSJBikeId = 1L,
-                            BSJSpecId = 10L
+                            BikeId = 1L,
+                            SpecificationId = 10L,
+                            Id = 10L
                         },
                         new
                         {
-                            BSJId = 11L,
-                            BSJBikeId = 1L,
-                            BSJSpecId = 11L
+                            BikeId = 1L,
+                            SpecificationId = 11L,
+                            Id = 11L
                         },
                         new
                         {
-                            BSJId = 12L,
-                            BSJBikeId = 1L,
-                            BSJSpecId = 12L
+                            BikeId = 1L,
+                            SpecificationId = 12L,
+                            Id = 12L
                         },
                         new
                         {
-                            BSJId = 13L,
-                            BSJBikeId = 1L,
-                            BSJSpecId = 13L
+                            BikeId = 1L,
+                            SpecificationId = 13L,
+                            Id = 13L
                         },
                         new
                         {
-                            BSJId = 14L,
-                            BSJBikeId = 1L,
-                            BSJSpecId = 14L
+                            BikeId = 1L,
+                            SpecificationId = 14L,
+                            Id = 14L
                         },
                         new
                         {
-                            BSJId = 15L,
-                            BSJBikeId = 1L,
-                            BSJSpecId = 15L
+                            BikeId = 1L,
+                            SpecificationId = 15L,
+                            Id = 15L
                         },
                         new
                         {
-                            BSJId = 16L,
-                            BSJBikeId = 1L,
-                            BSJSpecId = 16L
+                            BikeId = 1L,
+                            SpecificationId = 16L,
+                            Id = 16L
                         },
                         new
                         {
-                            BSJId = 17L,
-                            BSJBikeId = 1L,
-                            BSJSpecId = 17L
+                            BikeId = 1L,
+                            SpecificationId = 17L,
+                            Id = 17L
                         },
                         new
                         {
-                            BSJId = 18L,
-                            BSJBikeId = 1L,
-                            BSJSpecId = 18L
+                            BikeId = 1L,
+                            SpecificationId = 18L,
+                            Id = 18L
                         },
                         new
                         {
-                            BSJId = 19L,
-                            BSJBikeId = 1L,
-                            BSJSpecId = 19L
+                            BikeId = 1L,
+                            SpecificationId = 19L,
+                            Id = 19L
                         },
                         new
                         {
-                            BSJId = 20L,
-                            BSJBikeId = 1L,
-                            BSJSpecId = 20L
+                            BikeId = 1L,
+                            SpecificationId = 20L,
+                            Id = 20L
                         },
                         new
                         {
-                            BSJId = 21L,
-                            BSJBikeId = 1L,
-                            BSJSpecId = 21L
+                            BikeId = 1L,
+                            SpecificationId = 21L,
+                            Id = 21L
                         },
                         new
                         {
-                            BSJId = 22L,
-                            BSJBikeId = 1L,
-                            BSJSpecId = 22L
+                            BikeId = 1L,
+                            SpecificationId = 22L,
+                            Id = 22L
                         },
                         new
                         {
-                            BSJId = 23L,
-                            BSJBikeId = 1L,
-                            BSJSpecId = 23L
+                            BikeId = 1L,
+                            SpecificationId = 23L,
+                            Id = 23L
                         },
                         new
                         {
-                            BSJId = 24L,
-                            BSJBikeId = 1L,
-                            BSJSpecId = 24L
+                            BikeId = 1L,
+                            SpecificationId = 24L,
+                            Id = 24L
                         },
                         new
                         {
-                            BSJId = 25L,
-                            BSJBikeId = 1L,
-                            BSJSpecId = 25L
+                            BikeId = 1L,
+                            SpecificationId = 25L,
+                            Id = 25L
                         },
                         new
                         {
-                            BSJId = 26L,
-                            BSJBikeId = 2L,
-                            BSJSpecId = 26L
+                            BikeId = 2L,
+                            SpecificationId = 26L,
+                            Id = 26L
                         },
                         new
                         {
-                            BSJId = 27L,
-                            BSJBikeId = 2L,
-                            BSJSpecId = 2L
+                            BikeId = 2L,
+                            SpecificationId = 2L,
+                            Id = 27L
                         },
                         new
                         {
-                            BSJId = 28L,
-                            BSJBikeId = 2L,
-                            BSJSpecId = 3L
+                            BikeId = 2L,
+                            SpecificationId = 3L,
+                            Id = 28L
                         },
                         new
                         {
-                            BSJId = 29L,
-                            BSJBikeId = 2L,
-                            BSJSpecId = 27L
+                            BikeId = 2L,
+                            SpecificationId = 27L,
+                            Id = 29L
                         },
                         new
                         {
-                            BSJId = 30L,
-                            BSJBikeId = 2L,
-                            BSJSpecId = 28L
+                            BikeId = 2L,
+                            SpecificationId = 28L,
+                            Id = 30L
                         },
                         new
                         {
-                            BSJId = 31L,
-                            BSJBikeId = 2L,
-                            BSJSpecId = 6L
+                            BikeId = 2L,
+                            SpecificationId = 6L,
+                            Id = 31L
                         },
                         new
                         {
-                            BSJId = 32L,
-                            BSJBikeId = 2L,
-                            BSJSpecId = 7L
+                            BikeId = 2L,
+                            SpecificationId = 7L,
+                            Id = 32L
                         },
                         new
                         {
-                            BSJId = 33L,
-                            BSJBikeId = 2L,
-                            BSJSpecId = 29L
+                            BikeId = 2L,
+                            SpecificationId = 29L,
+                            Id = 33L
                         },
                         new
                         {
-                            BSJId = 34L,
-                            BSJBikeId = 2L,
-                            BSJSpecId = 9L
+                            BikeId = 2L,
+                            SpecificationId = 9L,
+                            Id = 34L
                         },
                         new
                         {
-                            BSJId = 35L,
-                            BSJBikeId = 2L,
-                            BSJSpecId = 30L
+                            BikeId = 2L,
+                            SpecificationId = 30L,
+                            Id = 35L
                         },
                         new
                         {
-                            BSJId = 36L,
-                            BSJBikeId = 2L,
-                            BSJSpecId = 31L
+                            BikeId = 2L,
+                            SpecificationId = 31L,
+                            Id = 36L
                         },
                         new
                         {
-                            BSJId = 37L,
-                            BSJBikeId = 2L,
-                            BSJSpecId = 32L
+                            BikeId = 2L,
+                            SpecificationId = 32L,
+                            Id = 37L
                         },
                         new
                         {
-                            BSJId = 38L,
-                            BSJBikeId = 2L,
-                            BSJSpecId = 33L
+                            BikeId = 2L,
+                            SpecificationId = 33L,
+                            Id = 38L
                         },
                         new
                         {
-                            BSJId = 39L,
-                            BSJBikeId = 2L,
-                            BSJSpecId = 14L
+                            BikeId = 2L,
+                            SpecificationId = 14L,
+                            Id = 39L
                         },
                         new
                         {
-                            BSJId = 40L,
-                            BSJBikeId = 2L,
-                            BSJSpecId = 15L
+                            BikeId = 2L,
+                            SpecificationId = 15L,
+                            Id = 40L
                         },
                         new
                         {
-                            BSJId = 41L,
-                            BSJBikeId = 2L,
-                            BSJSpecId = 16L
+                            BikeId = 2L,
+                            SpecificationId = 16L,
+                            Id = 41L
                         },
                         new
                         {
-                            BSJId = 42L,
-                            BSJBikeId = 2L,
-                            BSJSpecId = 34L
+                            BikeId = 2L,
+                            SpecificationId = 34L,
+                            Id = 42L
                         },
                         new
                         {
-                            BSJId = 43L,
-                            BSJBikeId = 2L,
-                            BSJSpecId = 35L
+                            BikeId = 2L,
+                            SpecificationId = 35L,
+                            Id = 43L
                         },
                         new
                         {
-                            BSJId = 44L,
-                            BSJBikeId = 2L,
-                            BSJSpecId = 36L
+                            BikeId = 2L,
+                            SpecificationId = 36L,
+                            Id = 44L
                         },
                         new
                         {
-                            BSJId = 45L,
-                            BSJBikeId = 2L,
-                            BSJSpecId = 20L
+                            BikeId = 2L,
+                            SpecificationId = 20L,
+                            Id = 45L
                         },
                         new
                         {
-                            BSJId = 46L,
-                            BSJBikeId = 2L,
-                            BSJSpecId = 21L
+                            BikeId = 2L,
+                            SpecificationId = 21L,
+                            Id = 46L
                         },
                         new
                         {
-                            BSJId = 47L,
-                            BSJBikeId = 2L,
-                            BSJSpecId = 37L
+                            BikeId = 2L,
+                            SpecificationId = 37L,
+                            Id = 47L
                         },
                         new
                         {
-                            BSJId = 48L,
-                            BSJBikeId = 2L,
-                            BSJSpecId = 23L
+                            BikeId = 2L,
+                            SpecificationId = 23L,
+                            Id = 48L
                         },
                         new
                         {
-                            BSJId = 49L,
-                            BSJBikeId = 2L,
-                            BSJSpecId = 24L
+                            BikeId = 2L,
+                            SpecificationId = 24L,
+                            Id = 49L
                         },
                         new
                         {
-                            BSJId = 50L,
-                            BSJBikeId = 2L,
-                            BSJSpecId = 38L
+                            BikeId = 2L,
+                            SpecificationId = 38L,
+                            Id = 50L
                         });
                 });
 
@@ -576,21 +592,21 @@ namespace BikeStore.Migrations
 
             modelBuilder.Entity("bikeStore.Data.Entities.ImgContent", b =>
                 {
-                    b.Property<long>("ICId")
+                    b.Property<long>("ImgContentId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<byte[]>("ICContent");
+                    b.Property<byte[]>("Content");
 
-                    b.Property<string>("ICMimeType");
+                    b.Property<string>("ImgContentMimeType");
 
-                    b.Property<string>("ICName");
+                    b.Property<string>("ImgContentName");
 
-                    b.Property<long?>("StoreImagesSIId");
+                    b.Property<long>("StoreImgId");
 
-                    b.HasKey("ICId");
+                    b.HasKey("ImgContentId");
 
-                    b.HasIndex("StoreImagesSIId");
+                    b.HasIndex("StoreImgId");
 
                     b.ToTable("ImgContent");
                 });
@@ -601,364 +617,364 @@ namespace BikeStore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("SpecBrand");
+                    b.Property<string>("Brand");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Model");
 
                     b.Property<long>("SpecCatId");
 
-                    b.Property<string>("SpecDescr");
-
-                    b.Property<string>("SpecModel");
-
-                    b.Property<string>("SpecType");
+                    b.Property<string>("Type");
 
                     b.HasKey("SpecId");
 
                     b.HasIndex("SpecCatId");
 
-                    b.ToTable("Specification");
+                    b.ToTable("Specifications");
 
                     b.HasData(
                         new
                         {
                             SpecId = 1L,
-                            SpecBrand = "SRAM",
+                            Brand = "SRAM",
+                            Description = "(Rainbow)",
+                            Model = "XX1",
                             SpecCatId = 1L,
-                            SpecDescr = "(Rainbow)",
-                            SpecModel = "XX1",
-                            SpecType = "CHAIN"
+                            Type = "CHAIN"
                         },
                         new
                         {
                             SpecId = 2L,
-                            SpecBrand = "SRAM",
+                            Brand = "SRAM",
+                            Description = "threaded BB",
+                            Model = "DUB",
                             SpecCatId = 1L,
-                            SpecDescr = "threaded BB",
-                            SpecModel = "DUB",
-                            SpecType = "BOTTOM BRACKET"
+                            Type = "BOTTOM BRACKET"
                         },
                         new
                         {
                             SpecId = 3L,
-                            SpecBrand = "QUARQ",
+                            Brand = "QUARQ",
+                            Description = "Boost™ 148, DUB, 170/175mm",
+                            Model = "XX1 Eagle Power Meter",
                             SpecCatId = 1L,
-                            SpecDescr = "Boost™ 148, DUB, 170/175mm",
-                            SpecModel = "XX1 Eagle Power Meter",
-                            SpecType = "CRANKSET"
+                            Type = "CRANKSET"
                         },
                         new
                         {
                             SpecId = 4L,
-                            SpecBrand = "SRAM",
+                            Brand = "SRAM",
+                            Description = "trigger, 12-speed",
+                            Model = "XX1 Eagle AXS",
                             SpecCatId = 1L,
-                            SpecDescr = "trigger, 12-speed",
-                            SpecModel = "XX1 Eagle AXS",
-                            SpecType = "SHIFT LEVERS"
+                            Type = "SHIFT LEVERS"
                         },
                         new
                         {
                             SpecId = 5L,
-                            SpecBrand = "SRAM",
+                            Brand = "SRAM",
+                            Description = "10-50t",
+                            Model = "XG-1299 Eagle",
                             SpecCatId = 1L,
-                            SpecDescr = "10-50t",
-                            SpecModel = "XG-1299 Eagle",
-                            SpecType = "CASSETTE"
+                            Type = "CASSETTE"
                         },
                         new
                         {
                             SpecId = 6L,
-                            SpecBrand = "Alloy",
+                            Brand = "Alloy",
+                            Description = "32T",
+                            Model = "",
                             SpecCatId = 1L,
-                            SpecDescr = "32T",
-                            SpecModel = "",
-                            SpecType = "CHAINRINGS"
+                            Type = "CHAINRINGS"
                         },
                         new
                         {
                             SpecId = 7L,
-                            SpecBrand = "SRAM",
+                            Brand = "SRAM",
+                            Description = "",
+                            Model = "XX1 Eagle AXS",
                             SpecCatId = 1L,
-                            SpecDescr = "",
-                            SpecModel = "XX1 Eagle AXS",
-                            SpecType = "REAR DERAILLEUR"
+                            Type = "REAR DERAILLEUR"
                         },
                         new
                         {
                             SpecId = 8L,
-                            SpecBrand = "RockShox",
+                            Brand = "RockShox",
+                            Description = "top-adjust Brain Fade, tapered carbon crown and steerer, 15x110mm Maxle® Stealth thru-axle, 42mm offset, 100mm of travel",
+                            Model = "SID Brain Ultimate",
                             SpecCatId = 2L,
-                            SpecDescr = "top-adjust Brain Fade, tapered carbon crown and steerer, 15x110mm Maxle® Stealth thru-axle, 42mm offset, 100mm of travel",
-                            SpecModel = "SID Brain Ultimate",
-                            SpecType = "FORK"
+                            Type = "FORK"
                         },
                         new
                         {
                             SpecId = 9L,
-                            SpecBrand = "RockShox",
+                            Brand = "RockShox",
+                            Description = "AUTOSAG, 51x257mm",
+                            Model = "Custom Micro Brain shock w/ Spike Valve",
                             SpecCatId = 2L,
-                            SpecDescr = "AUTOSAG, 51x257mm",
-                            SpecModel = "Custom Micro Brain shock w/ Spike Valve",
-                            SpecType = "REAR SHOCK"
+                            Type = "REAR SHOCK"
                         },
                         new
                         {
                             SpecId = 10L,
-                            SpecBrand = "Roval",
+                            Brand = "Roval",
+                            Description = "sealed cartridge bearings, 15mm thru-axle, 110mm spacing, 24h",
+                            Model = "Control SL",
                             SpecCatId = 3L,
-                            SpecDescr = "sealed cartridge bearings, 15mm thru-axle, 110mm spacing, 24h",
-                            SpecModel = "Control SL",
-                            SpecType = "FRONT HUB"
+                            Type = "FRONT HUB"
                         },
                         new
                         {
                             SpecId = 11L,
-                            SpecBrand = "Roval",
+                            Brand = "Roval",
+                            Description = "DT Swiss Star Ratchet, 54t engagement, SRAM XD driver body, 12mm thru-axle, 148mm spacing, 28h",
+                            Model = "Control SL",
                             SpecCatId = 3L,
-                            SpecDescr = "DT Swiss Star Ratchet, 54t engagement, SRAM XD driver body, 12mm thru-axle, 148mm spacing, 28h",
-                            SpecModel = "Control SL",
-                            SpecType = "REAR HUB"
+                            Type = "REAR HUB"
                         },
                         new
                         {
                             SpecId = 12L,
-                            SpecBrand = "Presta",
+                            Brand = "Presta",
+                            Description = "60mm valve",
+                            Model = "",
                             SpecCatId = 3L,
-                            SpecDescr = "60mm valve",
-                            SpecModel = "",
-                            SpecType = "INNER TUBES"
+                            Type = "INNER TUBES"
                         },
                         new
                         {
                             SpecId = 13L,
-                            SpecBrand = "DT Swiss",
+                            Brand = "DT Swiss",
+                            Description = "Competition Race",
+                            Model = "",
                             SpecCatId = 3L,
-                            SpecDescr = "Competition Race",
-                            SpecModel = "",
-                            SpecType = "SPOKES"
+                            Type = "SPOKES"
                         },
                         new
                         {
                             SpecId = 14L,
-                            SpecBrand = "Roval",
+                            Brand = "Roval",
+                            Description = "hookless carbon, 25mm internal width, tubeless-ready, hand-built",
+                            Model = "Control SL",
                             SpecCatId = 3L,
-                            SpecDescr = "hookless carbon, 25mm internal width, tubeless-ready, hand-built",
-                            SpecModel = "Control SL",
-                            SpecType = "RIMS"
+                            Type = "RIMS"
                         },
                         new
                         {
                             SpecId = 15L,
-                            SpecBrand = "Specialized",
+                            Brand = "Specialized",
+                            Description = "Control casing, GRIPTON® compound, 60 TPI, 2Bliss Ready, 29x2.3",
+                            Model = "Fast Trak",
                             SpecCatId = 3L,
-                            SpecDescr = "Control casing, GRIPTON® compound, 60 TPI, 2Bliss Ready, 29x2.3",
-                            SpecModel = "Fast Trak",
-                            SpecType = "FRONT TIRE"
+                            Type = "FRONT TIRE"
                         },
                         new
                         {
                             SpecId = 16L,
-                            SpecBrand = "Specialized",
+                            Brand = "Specialized",
+                            Description = "Control casing, GRIPTON® compound, 60 TPI, 2Bliss Ready, 29x2.3",
+                            Model = "Fast Trak",
                             SpecCatId = 3L,
-                            SpecDescr = "Control casing, GRIPTON® compound, 60 TPI, 2Bliss Ready, 29x2.3",
-                            SpecModel = "Fast Trak",
-                            SpecType = "REAR TIRE"
+                            Type = "REAR TIRE"
                         },
                         new
                         {
                             SpecId = 17L,
-                            SpecBrand = "Specialized",
+                            Brand = "Specialized",
+                            Description = "carbon fiber rails, carbon fiber base, 143mm",
+                            Model = "Body Geometry S-Works Power",
                             SpecCatId = 4L,
-                            SpecDescr = "carbon fiber rails, carbon fiber base, 143mm",
-                            SpecModel = "Body Geometry S-Works Power",
-                            SpecType = "SADDLE"
+                            Type = "SADDLE"
                         },
                         new
                         {
                             SpecId = 18L,
-                            SpecBrand = "Specialized",
+                            Brand = "Specialized",
+                            Description = "10mm setback, 30.9mm",
+                            Model = "S-Works FACT carbon",
                             SpecCatId = 4L,
-                            SpecDescr = "10mm setback, 30.9mm",
-                            SpecModel = "S-Works FACT carbon",
-                            SpecType = "SEATPOST"
+                            Type = "SEATPOST"
                         },
                         new
                         {
                             SpecId = 19L,
-                            SpecBrand = "Specialized",
+                            Brand = "Specialized",
+                            Description = "alloy, titanium bolts, 6-degree rise",
+                            Model = "S-Works SL",
                             SpecCatId = 4L,
-                            SpecDescr = "alloy, titanium bolts, 6-degree rise",
-                            SpecModel = "S-Works SL",
-                            SpecType = "STEM"
+                            Type = "STEM"
                         },
                         new
                         {
                             SpecId = 20L,
-                            SpecBrand = "Specialized",
+                            Brand = "Specialized",
+                            Description = "6-degree upsweep, 8-degree backsweep, 10mm rise, 760mm, 31.8mm",
+                            Model = "S-Works Carbon XC Mini Rise",
                             SpecCatId = 4L,
-                            SpecDescr = "6-degree upsweep, 8-degree backsweep, 10mm rise, 760mm, 31.8mm",
-                            SpecModel = "S-Works Carbon XC Mini Rise",
-                            SpecType = "HANDLEBARS"
+                            Type = "HANDLEBARS"
                         },
                         new
                         {
                             SpecId = 21L,
-                            SpecBrand = "Specialized",
+                            Brand = "Specialized",
+                            Description = "",
+                            Model = "Trail Grips",
                             SpecCatId = 4L,
-                            SpecDescr = "",
-                            SpecModel = "Trail Grips",
-                            SpecType = "GRIPS"
+                            Type = "GRIPS"
                         },
                         new
                         {
                             SpecId = 22L,
-                            SpecBrand = "SRAM",
+                            Brand = "SRAM",
+                            Description = "hydraulic disc",
+                            Model = "Level Ultimate",
                             SpecCatId = 5L,
-                            SpecDescr = "hydraulic disc",
-                            SpecModel = "Level Ultimate",
-                            SpecType = "FRONT BRAKE"
+                            Type = "FRONT BRAKE"
                         },
                         new
                         {
                             SpecId = 23L,
-                            SpecBrand = "SRAM",
+                            Brand = "SRAM",
+                            Description = "hydraulic disc",
+                            Model = "Level Ultimate",
                             SpecCatId = 5L,
-                            SpecDescr = "hydraulic disc",
-                            SpecModel = "Level Ultimate",
-                            SpecType = "REAR BRAKE"
+                            Type = "REAR BRAKE"
                         },
                         new
                         {
                             SpecId = 24L,
-                            SpecBrand = "Specialized",
+                            Brand = "Specialized",
+                            Description = "",
+                            Model = "Dirt",
                             SpecCatId = 6L,
-                            SpecDescr = "",
-                            SpecModel = "Dirt",
-                            SpecType = "PEDALS"
+                            Type = "PEDALS"
                         },
                         new
                         {
                             SpecId = 25L,
-                            SpecBrand = "Specialized",
+                            Brand = "Specialized",
+                            Description = "XC Geometry, Rider-First Engineered™, threaded BB, 12x148mm rear spacing, internal cable routing, 100mm of travel",
+                            Model = "S-Works FACT 12m",
                             SpecCatId = 7L,
-                            SpecDescr = "XC Geometry, Rider-First Engineered™, threaded BB, 12x148mm rear spacing, internal cable routing, 100mm of travel",
-                            SpecModel = "S-Works FACT 12m",
-                            SpecType = "SEAT BINDER"
+                            Type = "SEAT BINDER"
                         },
                         new
                         {
                             SpecId = 26L,
-                            SpecBrand = "SRAM",
+                            Brand = "SRAM",
+                            Description = "12-speed",
+                            Model = "GX Eagle",
                             SpecCatId = 1L,
-                            SpecDescr = "12-speed",
-                            SpecModel = "GX Eagle",
-                            SpecType = "CHAIN"
+                            Type = "CHAIN"
                         },
                         new
                         {
                             SpecId = 27L,
-                            SpecBrand = "SRAM",
+                            Brand = "SRAM",
+                            Description = "trigger, 12-speed",
+                            Model = "X01 Eagle",
                             SpecCatId = 1L,
-                            SpecDescr = "trigger, 12-speed",
-                            SpecModel = "X01 Eagle",
-                            SpecType = "SHIFT LEVERS"
+                            Type = "SHIFT LEVERS"
                         },
                         new
                         {
                             SpecId = 28L,
-                            SpecBrand = "SRAM",
+                            Brand = "SRAM",
+                            Description = "12-speed, 10-50t",
+                            Model = "XG-1295 Eagle",
                             SpecCatId = 1L,
-                            SpecDescr = "12-speed, 10-50t",
-                            SpecModel = "XG-1295 Eagle",
-                            SpecType = "CASSETTE"
+                            Type = "CASSETTE"
                         },
                         new
                         {
                             SpecId = 29L,
-                            SpecBrand = "RockShox",
+                            Brand = "RockShox",
+                            Description = "Position Sensitive, top-adjust Brain Fade, 15x110mm Maxle® Stealth thru-axle, 42mm offset, 100mm of travel",
+                            Model = "SID Brain 29",
                             SpecCatId = 2L,
-                            SpecDescr = "Position Sensitive, top-adjust Brain Fade, 15x110mm Maxle® Stealth thru-axle, 42mm offset, 100mm of travel",
-                            SpecModel = "SID Brain 29",
-                            SpecType = "FORK"
+                            Type = "FORK"
                         },
                         new
                         {
                             SpecId = 30L,
-                            SpecBrand = "Specialized",
+                            Brand = "Specialized",
+                            Description = "sealed cartridge bearings, 15x110mm spacing, 28h",
+                            Model = "",
                             SpecCatId = 3L,
-                            SpecDescr = "sealed cartridge bearings, 15x110mm spacing, 28h",
-                            SpecModel = "",
-                            SpecType = "FRONT HUB"
+                            Type = "FRONT HUB"
                         },
                         new
                         {
                             SpecId = 31L,
-                            SpecBrand = "DT Swiss",
+                            Brand = "DT Swiss",
+                            Description = "Star Ratchet, 36t engagement, SRAM XD driver body, 12mm thru-axle, 148mm spacing, 28h",
+                            Model = "350",
                             SpecCatId = 3L,
-                            SpecDescr = "Star Ratchet, 36t engagement, SRAM XD driver body, 12mm thru-axle, 148mm spacing, 28h",
-                            SpecModel = "350",
-                            SpecType = "REAR HUB"
+                            Type = "REAR HUB"
                         },
                         new
                         {
                             SpecId = 32L,
-                            SpecBrand = "DT Swiss",
+                            Brand = "DT Swiss",
+                            Description = "",
+                            Model = "Industry",
                             SpecCatId = 3L,
-                            SpecDescr = "",
-                            SpecModel = "Industry",
-                            SpecType = "SPOKES"
+                            Type = "SPOKES"
                         },
                         new
                         {
                             SpecId = 33L,
-                            SpecBrand = "Roval",
+                            Brand = "Roval",
+                            Description = "25mm internal width, tubeless-ready",
+                            Model = "Control Carbon",
                             SpecCatId = 3L,
-                            SpecDescr = "25mm internal width, tubeless-ready",
-                            SpecModel = "Control Carbon",
-                            SpecType = "RIMS"
+                            Type = "RIMS"
                         },
                         new
                         {
                             SpecId = 34L,
-                            SpecBrand = "Specialized",
+                            Brand = "Specialized",
+                            Description = "Hollow Titanium rails, 143mm",
+                            Model = "Body Geometry Power",
                             SpecCatId = 4L,
-                            SpecDescr = "Hollow Titanium rails, 143mm",
-                            SpecModel = "Body Geometry Power",
-                            SpecType = "SADDLE"
+                            Type = "SADDLE"
                         },
                         new
                         {
                             SpecId = 35L,
-                            SpecBrand = "Specialized",
+                            Brand = "Specialized",
+                            Description = " single-bolt, 30.9mm",
+                            Model = "Carbon",
                             SpecCatId = 4L,
-                            SpecDescr = " single-bolt, 30.9mm",
-                            SpecModel = "Carbon",
-                            SpecType = "SEATPOST"
+                            Type = "SEATPOST"
                         },
                         new
                         {
                             SpecId = 36L,
-                            SpecBrand = "Specialized",
+                            Brand = "Specialized",
+                            Description = "3D-forged alloy, 4-bolt, 6-degree rise",
+                            Model = "XC",
                             SpecCatId = 4L,
-                            SpecDescr = "3D-forged alloy, 4-bolt, 6-degree rise",
-                            SpecModel = "XC",
-                            SpecType = "STEM"
+                            Type = "STEM"
                         },
                         new
                         {
                             SpecId = 37L,
-                            SpecBrand = "SRAM",
+                            Brand = "SRAM",
+                            Description = "hydraulic disc",
+                            Model = "Level TLM",
                             SpecCatId = 5L,
-                            SpecDescr = "hydraulic disc",
-                            SpecModel = "Level TLM",
-                            SpecType = "FRONT BRAKE"
+                            Type = "FRONT BRAKE"
                         },
                         new
                         {
                             SpecId = 38L,
-                            SpecBrand = "Specialized",
+                            Brand = "Specialized",
+                            Description = "Alloy, 34.9mm",
+                            Model = "",
                             SpecCatId = 7L,
-                            SpecDescr = "Alloy, 34.9mm",
-                            SpecModel = "",
-                            SpecType = "SEAT BINDER"
+                            Type = "SEAT BINDER"
                         });
                 });
 
@@ -1023,54 +1039,66 @@ namespace BikeStore.Migrations
 
             modelBuilder.Entity("bikeStore.Data.Entities.StoreImages", b =>
                 {
-                    b.Property<long>("SIId")
+                    b.Property<long>("StoreImgId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("SIDescription");
+                    b.Property<string>("Description");
 
-                    b.HasKey("SIId");
+                    b.HasKey("StoreImgId");
 
                     b.ToTable("StoreImages");
                 });
 
-            modelBuilder.Entity("BikeStore.Data.Entities.BikeJunction", b =>
+            modelBuilder.Entity("BikeStore.Data.Entities.BikesColorSize", b =>
                 {
-                    b.HasOne("bikeStore.Data.Entities.Bike", "BJBike")
-                        .WithMany("BikeJunctions")
-                        .HasForeignKey("BId")
+                    b.HasOne("bikeStore.Data.Entities.Bike", "Bike")
+                        .WithMany("ColorSize")
+                        .HasForeignKey("BikeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("BikeStore.Data.Entities.Color", "Color")
+                        .WithMany("BikesColorSize")
+                        .HasForeignKey("ColorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("BikeStore.Data.Entities.Size", "Size")
+                        .WithMany("BikesColorSize")
+                        .HasForeignKey("SizeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("bikeStore.Data.Entities.Bike", b =>
                 {
-                    b.HasOne("bikeStore.Data.Entities.Category", "BCategory")
+                    b.HasOne("bikeStore.Data.Entities.Category", "Category")
                         .WithMany("Bikes")
-                        .HasForeignKey("BCategoryId")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("bikeStore.Data.Entities.StoreImages", "BImages")
+                    b.HasOne("bikeStore.Data.Entities.StoreImages", "Images")
                         .WithMany()
-                        .HasForeignKey("BImagesSIId");
+                        .HasForeignKey("ImagesStoreImgId");
                 });
 
-            modelBuilder.Entity("bikeStore.Data.Entities.BikeSpecJunction", b =>
+            modelBuilder.Entity("bikeStore.Data.Entities.BikesSpecifications", b =>
                 {
-                    b.HasOne("bikeStore.Data.Entities.Bike", "BSJBike")
-                        .WithMany("BikeSpecJunctions")
-                        .HasForeignKey("BSJBikeId")
+                    b.HasOne("bikeStore.Data.Entities.Bike", "Bike")
+                        .WithMany("Specifications")
+                        .HasForeignKey("BikeId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("bikeStore.Data.Entities.Specification", "BSJSpecification")
-                        .WithMany("BikeSpecJunctions")
-                        .HasForeignKey("BSJSpecificationSpecId");
+                    b.HasOne("bikeStore.Data.Entities.Specification", "Specification")
+                        .WithMany("BikesSpecifications")
+                        .HasForeignKey("SpecificationId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("bikeStore.Data.Entities.ImgContent", b =>
                 {
-                    b.HasOne("bikeStore.Data.Entities.StoreImages")
-                        .WithMany("SIImeges")
-                        .HasForeignKey("StoreImagesSIId");
+                    b.HasOne("bikeStore.Data.Entities.StoreImages", "StoreImages")
+                        .WithMany("ImgContents")
+                        .HasForeignKey("StoreImgId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("bikeStore.Data.Entities.Specification", b =>

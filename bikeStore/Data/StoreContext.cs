@@ -10,6 +10,7 @@ namespace bikeStore.Data
     {
         public DbSet<Bike> Bikes { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Specification> Specifications { get; set; }
 
         #region Data for Seed
         // for seed data only
@@ -52,114 +53,114 @@ namespace bikeStore.Data
 
         private readonly List<Specification> _dummySpecifications = new List<Specification>
         {
-             new Specification { SpecId = 1, SpecCatId = 1, SpecBrand = "SRAM", SpecType = "CHAIN", SpecModel="XX1" , SpecDescr = "(Rainbow)"},
-             new Specification { SpecId = 2, SpecCatId = 1, SpecBrand = "SRAM", SpecType = "BOTTOM BRACKET", SpecModel="DUB",SpecDescr = "threaded BB" },
-             new Specification { SpecId = 3, SpecCatId = 1, SpecBrand = "QUARQ", SpecType = "CRANKSET", SpecModel="XX1 Eagle Power Meter",SpecDescr = "Boost™ 148, DUB, 170/175mm" },
-             new Specification { SpecId = 4, SpecCatId = 1, SpecBrand = "SRAM", SpecType = "SHIFT LEVERS", SpecModel="XX1 Eagle AXS",SpecDescr = "trigger, 12-speed" },
-             new Specification { SpecId = 5, SpecCatId = 1, SpecBrand = "SRAM", SpecType = "CASSETTE", SpecModel="XG-1299 Eagle",SpecDescr = "10-50t" },
-             new Specification { SpecId = 6, SpecCatId = 1, SpecBrand = "Alloy", SpecType = "CHAINRINGS", SpecModel="",SpecDescr = "32T" },
-             new Specification { SpecId = 7, SpecCatId = 1, SpecBrand = "SRAM", SpecType = "REAR DERAILLEUR", SpecModel="XX1 Eagle AXS",SpecDescr = "" },
-             new Specification { SpecId = 8, SpecCatId = 2, SpecBrand = "RockShox", SpecType = "FORK", SpecModel="SID Brain Ultimate",SpecDescr = "top-adjust Brain Fade, tapered carbon crown and steerer, 15x110mm Maxle® Stealth thru-axle, 42mm offset, 100mm of travel" },
-             new Specification { SpecId = 9, SpecCatId = 2, SpecBrand = "RockShox", SpecType = "REAR SHOCK", SpecModel="Custom Micro Brain shock w/ Spike Valve",SpecDescr = "AUTOSAG, 51x257mm" },
-             new Specification { SpecId = 10, SpecCatId = 3, SpecBrand = "Roval", SpecType = "FRONT HUB", SpecModel="Control SL", SpecDescr = "sealed cartridge bearings, 15mm thru-axle, 110mm spacing, 24h"  },
-             new Specification { SpecId = 11, SpecCatId = 3, SpecBrand = "Roval", SpecType = "REAR HUB", SpecModel = "Control SL", SpecDescr = "DT Swiss Star Ratchet, 54t engagement, SRAM XD driver body, 12mm thru-axle, 148mm spacing, 28h" },
-             new Specification { SpecId = 12, SpecCatId = 3, SpecBrand = "Presta", SpecType = "INNER TUBES", SpecModel = "", SpecDescr = "60mm valve"},
-             new Specification { SpecId = 13, SpecCatId = 3, SpecBrand = "DT Swiss", SpecType = "SPOKES", SpecModel = "", SpecDescr = "Competition Race"},
-             new Specification { SpecId = 14, SpecCatId = 3, SpecBrand = "Roval", SpecType = "RIMS", SpecModel = "Control SL", SpecDescr = "hookless carbon, 25mm internal width, tubeless-ready, hand-built"},
-             new Specification { SpecId = 15, SpecCatId = 3, SpecBrand = "Specialized", SpecType = "FRONT TIRE", SpecModel = "Fast Trak", SpecDescr = "Control casing, GRIPTON® compound, 60 TPI, 2Bliss Ready, 29x2.3"},
-             new Specification { SpecId = 16, SpecCatId = 3, SpecBrand = "Specialized", SpecType = "REAR TIRE", SpecModel = "Fast Trak", SpecDescr = "Control casing, GRIPTON® compound, 60 TPI, 2Bliss Ready, 29x2.3"},
-             new Specification { SpecId = 17, SpecCatId = 4, SpecBrand = "Specialized", SpecType = "SADDLE", SpecModel = "Body Geometry S-Works Power", SpecDescr = "carbon fiber rails, carbon fiber base, 143mm"},
-             new Specification { SpecId = 18, SpecCatId = 4, SpecBrand = "Specialized", SpecType = "SEATPOST", SpecModel = "S-Works FACT carbon", SpecDescr = "10mm setback, 30.9mm"},
-             new Specification { SpecId = 19, SpecCatId = 4, SpecBrand = "Specialized", SpecType = "STEM", SpecModel = "S-Works SL", SpecDescr = "alloy, titanium bolts, 6-degree rise"},
-             new Specification { SpecId = 20, SpecCatId = 4, SpecBrand = "Specialized", SpecType = "HANDLEBARS", SpecModel = "S-Works Carbon XC Mini Rise", SpecDescr = "6-degree upsweep, 8-degree backsweep, 10mm rise, 760mm, 31.8mm"},
-             new Specification { SpecId = 21, SpecCatId = 4, SpecBrand = "Specialized", SpecType = "GRIPS", SpecModel = "Trail Grips", SpecDescr = ""},
-             new Specification { SpecId = 22, SpecCatId = 5, SpecBrand = "SRAM", SpecType = "FRONT BRAKE", SpecModel = "Level Ultimate", SpecDescr = "hydraulic disc"},
-             new Specification { SpecId = 23, SpecCatId = 5, SpecBrand = "SRAM", SpecType = "REAR BRAKE", SpecModel = "Level Ultimate", SpecDescr = "hydraulic disc"},
-             new Specification { SpecId = 24, SpecCatId = 6, SpecBrand = "Specialized", SpecType = "PEDALS", SpecModel = "Dirt", SpecDescr = ""},
-             new Specification { SpecId = 25, SpecCatId = 7, SpecBrand = "Specialized", SpecType = "SEAT BINDER", SpecModel = "S-Works FACT 12m", SpecDescr = "XC Geometry, Rider-First Engineered™, threaded BB, 12x148mm rear spacing, internal cable routing, 100mm of travel"},
+             new Specification { SpecId = 1, SpecCatId = 1, Brand = "SRAM", Type = "CHAIN", Model="XX1" , Description = "(Rainbow)"},
+             new Specification { SpecId = 2, SpecCatId = 1, Brand = "SRAM", Type = "BOTTOM BRACKET", Model="DUB",Description = "threaded BB" },
+             new Specification { SpecId = 3, SpecCatId = 1, Brand = "QUARQ", Type = "CRANKSET", Model="XX1 Eagle Power Meter",Description = "Boost™ 148, DUB, 170/175mm" },
+             new Specification { SpecId = 4, SpecCatId = 1, Brand = "SRAM", Type = "SHIFT LEVERS", Model="XX1 Eagle AXS",Description = "trigger, 12-speed" },
+             new Specification { SpecId = 5, SpecCatId = 1, Brand = "SRAM", Type = "CASSETTE", Model="XG-1299 Eagle",Description = "10-50t" },
+             new Specification { SpecId = 6, SpecCatId = 1, Brand = "Alloy", Type = "CHAINRINGS", Model="",Description = "32T" },
+             new Specification { SpecId = 7, SpecCatId = 1, Brand = "SRAM", Type = "REAR DERAILLEUR", Model="XX1 Eagle AXS",Description = "" },
+             new Specification { SpecId = 8, SpecCatId = 2, Brand = "RockShox", Type = "FORK", Model="SID Brain Ultimate",Description = "top-adjust Brain Fade, tapered carbon crown and steerer, 15x110mm Maxle® Stealth thru-axle, 42mm offset, 100mm of travel" },
+             new Specification { SpecId = 9, SpecCatId = 2, Brand = "RockShox", Type = "REAR SHOCK", Model="Custom Micro Brain shock w/ Spike Valve",Description = "AUTOSAG, 51x257mm" },
+             new Specification { SpecId = 10, SpecCatId = 3, Brand = "Roval", Type = "FRONT HUB", Model="Control SL", Description = "sealed cartridge bearings, 15mm thru-axle, 110mm spacing, 24h"  },
+             new Specification { SpecId = 11, SpecCatId = 3, Brand = "Roval", Type = "REAR HUB", Model = "Control SL", Description = "DT Swiss Star Ratchet, 54t engagement, SRAM XD driver body, 12mm thru-axle, 148mm spacing, 28h" },
+             new Specification { SpecId = 12, SpecCatId = 3, Brand = "Presta", Type = "INNER TUBES", Model = "", Description = "60mm valve"},
+             new Specification { SpecId = 13, SpecCatId = 3, Brand = "DT Swiss", Type = "SPOKES", Model = "", Description = "Competition Race"},
+             new Specification { SpecId = 14, SpecCatId = 3, Brand = "Roval", Type = "RIMS", Model = "Control SL", Description = "hookless carbon, 25mm internal width, tubeless-ready, hand-built"},
+             new Specification { SpecId = 15, SpecCatId = 3, Brand = "Specialized", Type = "FRONT TIRE", Model = "Fast Trak", Description = "Control casing, GRIPTON® compound, 60 TPI, 2Bliss Ready, 29x2.3"},
+             new Specification { SpecId = 16, SpecCatId = 3, Brand = "Specialized", Type = "REAR TIRE", Model = "Fast Trak", Description = "Control casing, GRIPTON® compound, 60 TPI, 2Bliss Ready, 29x2.3"},
+             new Specification { SpecId = 17, SpecCatId = 4, Brand = "Specialized", Type = "SADDLE", Model = "Body Geometry S-Works Power", Description = "carbon fiber rails, carbon fiber base, 143mm"},
+             new Specification { SpecId = 18, SpecCatId = 4, Brand = "Specialized", Type = "SEATPOST", Model = "S-Works FACT carbon", Description = "10mm setback, 30.9mm"},
+             new Specification { SpecId = 19, SpecCatId = 4, Brand = "Specialized", Type = "STEM", Model = "S-Works SL", Description = "alloy, titanium bolts, 6-degree rise"},
+             new Specification { SpecId = 20, SpecCatId = 4, Brand = "Specialized", Type = "HANDLEBARS", Model = "S-Works Carbon XC Mini Rise", Description = "6-degree upsweep, 8-degree backsweep, 10mm rise, 760mm, 31.8mm"},
+             new Specification { SpecId = 21, SpecCatId = 4, Brand = "Specialized", Type = "GRIPS", Model = "Trail Grips", Description = ""},
+             new Specification { SpecId = 22, SpecCatId = 5, Brand = "SRAM", Type = "FRONT BRAKE", Model = "Level Ultimate", Description = "hydraulic disc"},
+             new Specification { SpecId = 23, SpecCatId = 5, Brand = "SRAM", Type = "REAR BRAKE", Model = "Level Ultimate", Description = "hydraulic disc"},
+             new Specification { SpecId = 24, SpecCatId = 6, Brand = "Specialized", Type = "PEDALS", Model = "Dirt", Description = ""},
+             new Specification { SpecId = 25, SpecCatId = 7, Brand = "Specialized", Type = "SEAT BINDER", Model = "S-Works FACT 12m", Description = "XC Geometry, Rider-First Engineered™, threaded BB, 12x148mm rear spacing, internal cable routing, 100mm of travel"},
 
-             new Specification { SpecId = 26, SpecCatId = 1, SpecBrand = "SRAM", SpecType = "CHAIN", SpecModel="GX Eagle" , SpecDescr = "12-speed"},
-             new Specification { SpecId = 27, SpecCatId = 1, SpecBrand = "SRAM", SpecType = "SHIFT LEVERS", SpecModel="X01 Eagle",SpecDescr = "trigger, 12-speed" },
-             new Specification { SpecId = 28, SpecCatId = 1, SpecBrand = "SRAM", SpecType = "CASSETTE", SpecModel="XG-1295 Eagle",SpecDescr = "12-speed, 10-50t" },
-             new Specification { SpecId = 29, SpecCatId = 2, SpecBrand = "RockShox", SpecType = "FORK", SpecModel="SID Brain 29",SpecDescr = "Position Sensitive, top-adjust Brain Fade, 15x110mm Maxle® Stealth thru-axle, 42mm offset, 100mm of travel" },
-             new Specification { SpecId = 30, SpecCatId = 3, SpecBrand = "Specialized", SpecType = "FRONT HUB", SpecModel="", SpecDescr = "sealed cartridge bearings, 15x110mm spacing, 28h"  },
-             new Specification { SpecId = 31, SpecCatId = 3, SpecBrand = "DT Swiss", SpecType = "REAR HUB", SpecModel = "350", SpecDescr = "Star Ratchet, 36t engagement, SRAM XD driver body, 12mm thru-axle, 148mm spacing, 28h" },
-             new Specification { SpecId = 32, SpecCatId = 3, SpecBrand = "DT Swiss", SpecType = "SPOKES", SpecModel = "Industry", SpecDescr = ""},
-             new Specification { SpecId = 33, SpecCatId = 3, SpecBrand = "Roval", SpecType = "RIMS", SpecModel = "Control Carbon", SpecDescr = "25mm internal width, tubeless-ready"},
-             new Specification { SpecId = 34, SpecCatId = 4, SpecBrand = "Specialized", SpecType = "SADDLE", SpecModel = "Body Geometry Power", SpecDescr = "Hollow Titanium rails, 143mm"},
-             new Specification { SpecId = 35, SpecCatId = 4, SpecBrand = "Specialized", SpecType = "SEATPOST", SpecModel = "Carbon", SpecDescr = " single-bolt, 30.9mm"},
-             new Specification { SpecId = 36, SpecCatId = 4, SpecBrand = "Specialized", SpecType = "STEM", SpecModel = "XC", SpecDescr = "3D-forged alloy, 4-bolt, 6-degree rise"},
-             new Specification { SpecId = 37, SpecCatId = 5, SpecBrand = "SRAM", SpecType = "FRONT BRAKE", SpecModel = "Level TLM", SpecDescr = "hydraulic disc"},
-             new Specification { SpecId = 38, SpecCatId = 7, SpecBrand = "Specialized", SpecType = "SEAT BINDER", SpecModel = "", SpecDescr = "Alloy, 34.9mm"}
+             new Specification { SpecId = 26, SpecCatId = 1, Brand = "SRAM", Type = "CHAIN", Model="GX Eagle" , Description = "12-speed"},
+             new Specification { SpecId = 27, SpecCatId = 1, Brand = "SRAM", Type = "SHIFT LEVERS", Model="X01 Eagle",Description = "trigger, 12-speed" },
+             new Specification { SpecId = 28, SpecCatId = 1, Brand = "SRAM", Type = "CASSETTE", Model="XG-1295 Eagle",Description = "12-speed, 10-50t" },
+             new Specification { SpecId = 29, SpecCatId = 2, Brand = "RockShox", Type = "FORK", Model="SID Brain 29",Description = "Position Sensitive, top-adjust Brain Fade, 15x110mm Maxle® Stealth thru-axle, 42mm offset, 100mm of travel" },
+             new Specification { SpecId = 30, SpecCatId = 3, Brand = "Specialized", Type = "FRONT HUB", Model="", Description = "sealed cartridge bearings, 15x110mm spacing, 28h"  },
+             new Specification { SpecId = 31, SpecCatId = 3, Brand = "DT Swiss", Type = "REAR HUB", Model = "350", Description = "Star Ratchet, 36t engagement, SRAM XD driver body, 12mm thru-axle, 148mm spacing, 28h" },
+             new Specification { SpecId = 32, SpecCatId = 3, Brand = "DT Swiss", Type = "SPOKES", Model = "Industry", Description = ""},
+             new Specification { SpecId = 33, SpecCatId = 3, Brand = "Roval", Type = "RIMS", Model = "Control Carbon", Description = "25mm internal width, tubeless-ready"},
+             new Specification { SpecId = 34, SpecCatId = 4, Brand = "Specialized", Type = "SADDLE", Model = "Body Geometry Power", Description = "Hollow Titanium rails, 143mm"},
+             new Specification { SpecId = 35, SpecCatId = 4, Brand = "Specialized", Type = "SEATPOST", Model = "Carbon", Description = " single-bolt, 30.9mm"},
+             new Specification { SpecId = 36, SpecCatId = 4, Brand = "Specialized", Type = "STEM", Model = "XC", Description = "3D-forged alloy, 4-bolt, 6-degree rise"},
+             new Specification { SpecId = 37, SpecCatId = 5, Brand = "SRAM", Type = "FRONT BRAKE", Model = "Level TLM", Description = "hydraulic disc"},
+             new Specification { SpecId = 38, SpecCatId = 7, Brand = "Specialized", Type = "SEAT BINDER", Model = "", Description = "Alloy, 34.9mm"}
 
              //new Specification { SpecId = 11, SpecCategoryId = 3, SpecBrand = "", SpecType = "", SpecModel = "", SpecDescription = ""}
         };
 
         private readonly List<Bike> _dummyBikes = new List<Bike>
         {
-            new Bike { BId = 1, BBrand = "Specialized", BCategoryId = 5, BModel = "S-Works Epic AXS", IsInStock = true,  BPrice = 1299.6M},
-            new Bike { BId = 2, BBrand = "Specialized", BCategoryId = 5, BModel = "Epic Pro", IsInStock = true, BPrice = 899.5M}
+            new Bike { BikeId = 1, Brand = "Specialized", CategoryId = 5, Model = "S-Works Epic AXS", IsInStock = true,  Price = 1299.6M},
+            new Bike { BikeId = 2, Brand = "Specialized", CategoryId = 5, Model = "Epic Pro", IsInStock = true, Price = 899.5M}
         };
 
-        private readonly List<BikeJunction> _dummyBikeJunctions = new List<BikeJunction>
-        {
-            new BikeJunction { BJId = 1, BId = 1, BJColor = Color.GlossDoveGrey , BJSize = Size.M },
-            new BikeJunction { BJId = 2, BId = 2, BJColor = Color.BlueMetallic , BJSize = Size.M }
-        };
+        //private readonly List<BikeJunction> _dummyBikeJunctions = new List<BikeJunction>
+        //{
+        //    new BikeJunction { BJId = 1, BId = 1, BJColor = Color.GlossDoveGrey , BJSize = Size.M },
+        //    new BikeJunction { BJId = 2, BId = 2, BJColor = Color.BlueMetallic , BJSize = Size.M }
+        //};
 
-        private readonly List<BikeSpecJunction> _dummyBikeSpecJunctions = new List<BikeSpecJunction>
+        private readonly List<BikesSpecifications> _dummyBikeSpecJunctions = new List<BikesSpecifications>
         {
-            new BikeSpecJunction{ BSJId = 1, BSJBikeId = 1, BSJSpecId = 1},
-            new BikeSpecJunction{ BSJId = 2, BSJBikeId = 1, BSJSpecId = 2},
-            new BikeSpecJunction{ BSJId = 3, BSJBikeId = 1, BSJSpecId = 3},
-            new BikeSpecJunction{ BSJId = 4, BSJBikeId = 1, BSJSpecId = 4},
-            new BikeSpecJunction{ BSJId = 5, BSJBikeId = 1, BSJSpecId = 5},
-            new BikeSpecJunction{ BSJId = 6, BSJBikeId = 1, BSJSpecId = 6},
-            new BikeSpecJunction{ BSJId = 7, BSJBikeId = 1, BSJSpecId = 7},
-            new BikeSpecJunction{ BSJId = 8, BSJBikeId = 1, BSJSpecId = 8},
-            new BikeSpecJunction{ BSJId = 9, BSJBikeId = 1, BSJSpecId = 9},
-            new BikeSpecJunction{ BSJId = 10, BSJBikeId = 1, BSJSpecId = 10},
-            new BikeSpecJunction{ BSJId = 11, BSJBikeId = 1, BSJSpecId = 11},
-            new BikeSpecJunction{ BSJId = 12, BSJBikeId = 1, BSJSpecId = 12},
-            new BikeSpecJunction{ BSJId = 13, BSJBikeId = 1, BSJSpecId = 13},
-            new BikeSpecJunction{ BSJId = 14, BSJBikeId = 1, BSJSpecId = 14},
-            new BikeSpecJunction{ BSJId = 15, BSJBikeId = 1, BSJSpecId = 15},
-            new BikeSpecJunction{ BSJId = 16, BSJBikeId = 1, BSJSpecId = 16},
-            new BikeSpecJunction{ BSJId = 17, BSJBikeId = 1, BSJSpecId = 17},
-            new BikeSpecJunction{ BSJId = 18, BSJBikeId = 1, BSJSpecId = 18},
-            new BikeSpecJunction{ BSJId = 19, BSJBikeId = 1, BSJSpecId = 19},
-            new BikeSpecJunction{ BSJId = 20, BSJBikeId = 1, BSJSpecId = 20},
-            new BikeSpecJunction{ BSJId = 21, BSJBikeId = 1, BSJSpecId = 21},
-            new BikeSpecJunction{ BSJId = 22, BSJBikeId = 1, BSJSpecId = 22},
-            new BikeSpecJunction{ BSJId = 23, BSJBikeId = 1, BSJSpecId = 23},
-            new BikeSpecJunction{ BSJId = 24, BSJBikeId = 1, BSJSpecId = 24},
-            new BikeSpecJunction{ BSJId = 25, BSJBikeId = 1, BSJSpecId = 25},
+            new BikesSpecifications{ Id = 1, BikeId = 1, SpecificationId = 1},
+            new BikesSpecifications{ Id = 2, BikeId = 1, SpecificationId = 2},
+            new BikesSpecifications{ Id = 3, BikeId = 1, SpecificationId = 3},
+            new BikesSpecifications{ Id = 4, BikeId = 1, SpecificationId = 4},
+            new BikesSpecifications{ Id = 5, BikeId = 1, SpecificationId = 5},
+            new BikesSpecifications{ Id = 6, BikeId = 1, SpecificationId = 6},
+            new BikesSpecifications{ Id = 7, BikeId = 1, SpecificationId = 7},
+            new BikesSpecifications{ Id = 8, BikeId = 1, SpecificationId = 8},
+            new BikesSpecifications{ Id = 9, BikeId = 1, SpecificationId = 9},
+            new BikesSpecifications{ Id = 10, BikeId = 1, SpecificationId = 10},
+            new BikesSpecifications{ Id = 11, BikeId = 1, SpecificationId = 11},
+            new BikesSpecifications{ Id = 12, BikeId = 1, SpecificationId = 12},
+            new BikesSpecifications{ Id = 13, BikeId = 1, SpecificationId = 13},
+            new BikesSpecifications{ Id = 14, BikeId = 1, SpecificationId = 14},
+            new BikesSpecifications{ Id = 15, BikeId = 1, SpecificationId = 15},
+            new BikesSpecifications{ Id = 16, BikeId = 1, SpecificationId = 16},
+            new BikesSpecifications{ Id = 17, BikeId = 1, SpecificationId = 17},
+            new BikesSpecifications{ Id = 18, BikeId = 1, SpecificationId = 18},
+            new BikesSpecifications{ Id = 19, BikeId = 1, SpecificationId = 19},
+            new BikesSpecifications{ Id = 20, BikeId = 1, SpecificationId = 20},
+            new BikesSpecifications{ Id = 21, BikeId = 1, SpecificationId = 21},
+            new BikesSpecifications{ Id = 22, BikeId = 1, SpecificationId = 22},
+            new BikesSpecifications{ Id = 23, BikeId = 1, SpecificationId = 23},
+            new BikesSpecifications{ Id = 24, BikeId = 1, SpecificationId = 24},
+            new BikesSpecifications{ Id = 25, BikeId = 1, SpecificationId = 25},
 
-            new BikeSpecJunction{ BSJId = 26, BSJBikeId = 2, BSJSpecId = 26},
-            new BikeSpecJunction{ BSJId = 27, BSJBikeId = 2, BSJSpecId = 2},
-            new BikeSpecJunction{ BSJId = 28, BSJBikeId = 2, BSJSpecId = 3},
-            new BikeSpecJunction{ BSJId = 29, BSJBikeId = 2, BSJSpecId = 27},
-            new BikeSpecJunction{ BSJId = 30, BSJBikeId = 2, BSJSpecId = 28},
-            new BikeSpecJunction{ BSJId = 31, BSJBikeId = 2, BSJSpecId = 6},
-            new BikeSpecJunction{ BSJId = 32, BSJBikeId = 2, BSJSpecId = 7},
-            new BikeSpecJunction{ BSJId = 33, BSJBikeId = 2, BSJSpecId = 29},
-            new BikeSpecJunction{ BSJId = 34, BSJBikeId = 2, BSJSpecId = 9},
-            new BikeSpecJunction{ BSJId = 35, BSJBikeId = 2, BSJSpecId = 30},
-            new BikeSpecJunction{ BSJId = 36, BSJBikeId = 2, BSJSpecId = 31},
-            new BikeSpecJunction{ BSJId = 37, BSJBikeId = 2, BSJSpecId = 32},
-            new BikeSpecJunction{ BSJId = 38, BSJBikeId = 2, BSJSpecId = 33},
-            new BikeSpecJunction{ BSJId = 39, BSJBikeId = 2, BSJSpecId = 14},
-            new BikeSpecJunction{ BSJId = 40, BSJBikeId = 2, BSJSpecId = 15},
-            new BikeSpecJunction{ BSJId = 41, BSJBikeId = 2, BSJSpecId = 16},
-            new BikeSpecJunction{ BSJId = 42, BSJBikeId = 2, BSJSpecId = 34},
-            new BikeSpecJunction{ BSJId = 43, BSJBikeId = 2, BSJSpecId = 35},
-            new BikeSpecJunction{ BSJId = 44, BSJBikeId = 2, BSJSpecId = 36},
-            new BikeSpecJunction{ BSJId = 45, BSJBikeId = 2, BSJSpecId = 20},
-            new BikeSpecJunction{ BSJId = 46, BSJBikeId = 2, BSJSpecId = 21},
-            new BikeSpecJunction{ BSJId = 47, BSJBikeId = 2, BSJSpecId = 37},
-            new BikeSpecJunction{ BSJId = 48, BSJBikeId = 2, BSJSpecId = 23},
-            new BikeSpecJunction{ BSJId = 49, BSJBikeId = 2, BSJSpecId = 24},
-            new BikeSpecJunction{ BSJId = 50, BSJBikeId = 2, BSJSpecId = 38}
+            new BikesSpecifications{ Id = 26, BikeId = 2, SpecificationId = 26},
+            new BikesSpecifications{ Id = 27, BikeId = 2, SpecificationId = 2},
+            new BikesSpecifications{ Id = 28, BikeId = 2, SpecificationId = 3},
+            new BikesSpecifications{ Id = 29, BikeId = 2, SpecificationId = 27},
+            new BikesSpecifications{ Id = 30, BikeId = 2, SpecificationId = 28},
+            new BikesSpecifications{ Id = 31, BikeId = 2, SpecificationId = 6},
+            new BikesSpecifications{ Id = 32, BikeId = 2, SpecificationId = 7},
+            new BikesSpecifications{ Id = 33, BikeId = 2, SpecificationId = 29},
+            new BikesSpecifications{ Id = 34, BikeId = 2, SpecificationId = 9},
+            new BikesSpecifications{ Id = 35, BikeId = 2, SpecificationId = 30},
+            new BikesSpecifications{ Id = 36, BikeId = 2, SpecificationId = 31},
+            new BikesSpecifications{ Id = 37, BikeId = 2, SpecificationId = 32},
+            new BikesSpecifications{ Id = 38, BikeId = 2, SpecificationId = 33},
+            new BikesSpecifications{ Id = 39, BikeId = 2, SpecificationId = 14},
+            new BikesSpecifications{ Id = 40, BikeId = 2, SpecificationId = 15},
+            new BikesSpecifications{ Id = 41, BikeId = 2, SpecificationId = 16},
+            new BikesSpecifications{ Id = 42, BikeId = 2, SpecificationId = 34},
+            new BikesSpecifications{ Id = 43, BikeId = 2, SpecificationId = 35},
+            new BikesSpecifications{ Id = 44, BikeId = 2, SpecificationId = 36},
+            new BikesSpecifications{ Id = 45, BikeId = 2, SpecificationId = 20},
+            new BikesSpecifications{ Id = 46, BikeId = 2, SpecificationId = 21},
+            new BikesSpecifications{ Id = 47, BikeId = 2, SpecificationId = 37},
+            new BikesSpecifications{ Id = 48, BikeId = 2, SpecificationId = 23},
+            new BikesSpecifications{ Id = 49, BikeId = 2, SpecificationId = 24},
+            new BikesSpecifications{ Id = 50, BikeId = 2, SpecificationId = 38}
         };
 
 
@@ -174,17 +175,18 @@ namespace bikeStore.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Bike>()
-                   .Property(p => p.BPrice)
+                   .Property(p => p.Price)
                    .HasColumnType("decimal(18,2)");
-
+            builder.Entity<BikesSpecifications>().HasKey(s => new { s.BikeId, s.SpecificationId });
+            builder.Entity<BikesColorSize>().HasKey(c => new { c.BikeId, c.ColorId, c.SizeId });
             // if no data, seed db with dummy data
 
             builder.Entity<Category>().HasData(_dummyCategories);
             builder.Entity<SpecificationCategory>().HasData(_dummySpecCategories);
             builder.Entity<Specification>().HasData(_dummySpecifications);
             builder.Entity<Bike>().HasData(_dummyBikes);
-            builder.Entity<BikeSpecJunction>().HasData(_dummyBikeSpecJunctions);
-            builder.Entity<BikeJunction>().HasData(_dummyBikeJunctions);
+            builder.Entity<BikesSpecifications>().HasData(_dummyBikeSpecJunctions);
+            //builder.Entity<BikeJunction>().HasData(_dummyBikeJunctions);
 
             base.OnModelCreating(builder);
         }

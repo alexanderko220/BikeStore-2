@@ -11,6 +11,8 @@ using AutoMapper;
 using BikeStore.Models.Bikes;
 using BikeStore.Data.Repository;
 using BikeStore.Models.Categories;
+using BikeStore.Data.Entities;
+using BikeStore.Models.Dictionaries;
 
 namespace bikeStore
 {
@@ -33,15 +35,20 @@ namespace bikeStore
                     .AddJsonOptions( options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             services.AddScoped(typeof(IRepo<>), typeof(BaseRepo<>));
-
+            services.AddScoped(typeof(IRepo<Color>), typeof(BaseRepo<Color>));
+            services.AddScoped(typeof(IRepo<Size>), typeof(BaseRepo<Size>));
             services.AddScoped<IBikeRepository, BikeRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+
 
             //services.AddAutoMapper(typeof(MappingProfile));
             var mappingConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new BikeProfile());
                 mc.AddProfile( new CategoryProfile());
+                mc.AddProfile(new CategoryDictionaryProfile());
+                mc.AddProfile(new ColorProfile());
+                mc.AddProfile(new SizeProfile());
             });
 
             services.AddSingleton(mappingConfig.CreateMapper());

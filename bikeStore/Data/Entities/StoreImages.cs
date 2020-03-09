@@ -6,10 +6,10 @@ namespace bikeStore.Data.Entities
     public class StoreImages
     {
         [Key]
-        public long SIId { get; set; }
+        public long StoreImgId { get; set; }
         
-        public string SIDescription { get; set; }
+        public string Description { get; set; }
 
-        public IEnumerable<ImgContent> SIImeges { get; set; }  
+        public IEnumerable<ImgContent> ImgContents { get; set; }  
     }
 }

@@ -1,0 +1,59 @@
+<h1 mat-dialog-title>Create new bike</h1>
+
+<form autocomplete="off" [formGroup]="form" (ngSubmit)="save()">
+  <div mat-dialog-content>
+    <div class="row">
+      <div class="col-md-6 col-lg-3">
+        <mat-form-field appearance="fill"
+                        [hideRequiredMarker]="hideRequiredControl"
+                        [floatLabel]="floatLabelControl">
+          <mat-label>Brand</mat-label>
+          <input matInput placeholder="Brand" required formControlName="brand" cdkFocusInitial>
+        </mat-form-field>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <mat-form-field appearance="fill"
+                        [hideRequiredMarker]="hideRequiredControl"
+                        [floatLabel]="floatLabelControl">
+          <mat-label>Model</mat-label>
+          <input matInput placeholder="Model" required formControlName="model">
+        </mat-form-field>
+      </div>
+      <div class="col-md-4 col-lg-2">
+        <mat-form-field appearance="fill"
+                        [hideRequiredMarker]="hideRequiredControl"
+                        [floatLabel]="floatLabelControl">
+          <mat-label>Price</mat-label>
+          <input matInput placeholder="Price" required formControlName="price">
+        </mat-form-field>
+      </div>
+      <div class="col-md-6 col-lg-3" style="margin-top:18px;">
+        <mat-checkbox formControlName="isInStock">Is in stock</mat-checkbox>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 col-lg-3">
+        <mat-form-field appearance="fill"
+                        [hideRequiredMarker]="hideRequiredControl"
+                        [floatLabel]="floatLabelControl">
+          <mat-label>Caegory</mat-label>
+          <mat-select required [(ngModel)]="data" (selectionChange)="onCategoryChange()" formControlName="category">
+            <mat-option *ngFor="let cat of categories" [value]="cat.id">
+              {{cat.value}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+  </div>
+  <div mat-dialog-actions align="end">
+    <div class="p-1">
+      <!--(click)="save()"-->
+      <button type="submit" class="btn btn-outline-primary mr-1" [disabled]="form.invalid">Save</button>
+      <button type="button" class="btn btn-outline-warning" mat-dialog-close="false">Cancel</button>
+    </div>
+  </div>
+</form>
+
+

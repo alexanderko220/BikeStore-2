@@ -8,20 +8,17 @@ namespace bikeStore.Data.Entities
     public class Bike
     {
         [Key]
-        public long BId { get; set; }
-        public string BBrand { get; set; }
-        public string BModel { get; set; }
-        //public string BSize { get; set; }
-        //public string BColor { get; set; }
+        public long BikeId { get; set; }
+        public string Brand { get; set; }
+        public string Model { get; set; }
         public bool IsInStock { get; set; }
-        public decimal? BPrice { get; set; }
-        public byte[] BThumbImgContent { get; set; }
-        public long BCategoryId { get; set; }
-        public Category BCategory { get; set; }
-        public IEnumerable<BikeSpecJunction> BikeSpecJunctions { get; set; }
-        public IEnumerable<BikeJunction> BikeJunctions { get; set; }
-
-        public long BImgId { get; set; }
-        public StoreImages BImages { get; set; } 
+        public decimal? Price { get; set; }
+        public byte[] ThumbImgContent { get; set; }
+        public long CategoryId { get; set; }
+        public Category Category { get; set; }
+        public long ImgId { get; set; }
+        public StoreImages Images { get; set; }
+        public IEnumerable<BikesSpecifications> Specifications { get; set; }
+        public IEnumerable<BikesColorSize> ColorSize { get; set; }
     }
 }

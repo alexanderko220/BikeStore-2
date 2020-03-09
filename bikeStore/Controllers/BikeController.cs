@@ -39,6 +39,8 @@ namespace bikeStore.Controllers
         public async Task<IActionResult> GetBike(long bikeId)
         {
             var bike = await _bikeRepository.GetBikeAsync(bikeId);
+
+
             if (bike != null)
                 return Ok(bike);
             else return NotFound();

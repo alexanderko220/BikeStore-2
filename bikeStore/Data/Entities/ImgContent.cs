@@ -5,12 +5,15 @@ namespace bikeStore.Data.Entities
     public class ImgContent
     {
         [Key]
-        public long ICId { get; set; }
+        public long ImgContentId { get; set; }
 
-        public string ICName { get; set; }
+        public string ImgContentName { get; set; }
 
-        public string  ICMimeType { get; set; }
+        public string  ImgContentMimeType { get; set; }
 
-        public byte[] ICContent { get; set; }
+        public byte[] Content { get; set; }
+
+        public long StoreImgId { get; set; }
+        public StoreImages StoreImages { get; set; }
     }
 }
