@@ -8,6 +8,7 @@ using bikeStore.Data.Repository;
 using BikeStore.Data.Entities;
 using BikeStore.Data.Repository;
 using BikeStore.Models;
+using BikeStore.Models.Specifications;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -23,6 +24,8 @@ namespace BikeStore.Controllers
         private readonly IRepo<Color> _colorRepository;
         private readonly IRepo<Size> _sizeRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly ISpecificationRepository _specificaionRepository;
+        private readonly IRepo<SpecificationCategory> _specificationCategoryRepository;
         private readonly IMapper _mapper;
 
         public AdminController(IBikeRepository bikeRepository, 
@@ -30,6 +33,8 @@ namespace BikeStore.Controllers
                                IRepo<Size> sizeRepository,
                                IRepo<Color> colorRepository,
                                ICategoryRepository categoryRepository,
+                               ISpecificationRepository specificaionRepository,
+                               IRepo<SpecificationCategory> specificationCategoryRepository,
                                IMapper mapper)
         {
             _bikeRepository = bikeRepository ?? throw new ArgumentNullException(nameof(bikeRepository));
@@ -37,6 +42,8 @@ namespace BikeStore.Controllers
             _colorRepository = colorRepository ?? throw new ArgumentNullException(nameof(colorRepository));
             _sizeRepository = sizeRepository ?? throw new ArgumentNullException(nameof(sizeRepository));
             _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
+            _specificaionRepository = specificaionRepository ?? throw new ArgumentNullException(nameof(specificaionRepository));
+            _specificationCategoryRepository = specificationCategoryRepository ?? throw new ArgumentNullException(nameof(specificationCategoryRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
@@ -123,6 +130,43 @@ namespace BikeStore.Controllers
                 throw new Exception(ex.Message);
             }
            
+        }
+
+        [HttpGet]
+        [Route("specifications/category")]
+        public async Task<IActionResult> GetSpecificationsCategoryList()
+        {
+            try
+            {
+                var categories = await _specificationCategoryRepository.GetRangeByConditionAsync( x => x.IsSpecCatActive);
+                if (categories.Any())
+                    return Ok(_mapper.Map<IEnumerable<SpecificationCategory>, IEnumerable<IdValue>>(categories));
+                else return NotFound();
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
+
+        }
+
+        [HttpGet]
+        [Route("specifications/{catId}")]
+        public async Task<IActionResult> GetSpecifications(long catId)
+        {
+            try
+            {
+                var specifications = await _specificaionRepository.GetSpecificationsByCategory(catId);
+                if (specifications.Any())
+                    return Ok(_mapper.Map<IEnumerable<Specification>, IEnumerable<SpecificationDTO>>(specifications));
+                else return NotFound();
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

@@ -45,7 +45,7 @@ export class AdminComponent implements OnInit {
   columnDefs = [
     {
       headerName: 'Name',
-      field: 'bBrand',
+      field: 'brand',
       sortable: true,
       filter: true,
       //checkboxSelection: true,
@@ -56,17 +56,27 @@ export class AdminComponent implements OnInit {
     },
     {
       headerName: 'Model',
-      field: 'bModel',
+      field: 'model',
       sortable: true,
       filter: true,
       flex: 3
     },
     {
       headerName: 'Price',
-      field: 'bPrice',
+      field: 'price',
       sortable: true,
       filter: true,
       flex: 1
+    },
+    {
+      headerName: 'Is in stock',
+      field: 'isInStock',
+      sortable: true,
+      filter: true,
+      flex: 1,
+      cellRenderer: params => {
+        return `<input type='checkbox' ${params.value ? 'checked' : ''} />`;
+      }
     },
     {
       headerName: '',

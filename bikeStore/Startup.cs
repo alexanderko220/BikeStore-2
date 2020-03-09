@@ -13,6 +13,8 @@ using BikeStore.Data.Repository;
 using BikeStore.Models.Categories;
 using BikeStore.Data.Entities;
 using BikeStore.Models.Dictionaries;
+using BikeStore.Models.Specifications;
+using bikeStore.Data.Entities;
 
 namespace bikeStore
 {
@@ -39,7 +41,8 @@ namespace bikeStore
             services.AddScoped(typeof(IRepo<Size>), typeof(BaseRepo<Size>));
             services.AddScoped<IBikeRepository, BikeRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
-
+            services.AddScoped<ISpecificationRepository, SpecificationRepository>();
+            services.AddScoped(typeof(IRepo<SpecificationCategory>), typeof(BaseRepo<SpecificationCategory>));
 
             //services.AddAutoMapper(typeof(MappingProfile));
             var mappingConfig = new MapperConfiguration(mc =>
@@ -49,6 +52,8 @@ namespace bikeStore
                 mc.AddProfile(new CategoryDictionaryProfile());
                 mc.AddProfile(new ColorProfile());
                 mc.AddProfile(new SizeProfile());
+                mc.AddProfile(new SpecificationCategoryProfile());
+                mc.AddProfile(new SpecificationProfile());
             });
 
             services.AddSingleton(mappingConfig.CreateMapper());
