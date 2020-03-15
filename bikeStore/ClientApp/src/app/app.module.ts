@@ -56,6 +56,7 @@ import { MenuCategoryPipePipe } from './pipes/menu-category-pipe.pipe';
 import { BikeComponent } from './bike/bike.component';
 import { AdminComponent } from './admin/admin.component';
 import { AdminModalComponent } from './admin/admin-modal/admin-modal.component';
+import { DragDropDirective } from './directives/drag-drop.directive';
 
 
 @NgModule({
@@ -67,7 +68,8 @@ import { AdminModalComponent } from './admin/admin-modal/admin-modal.component';
     MenuCategoryPipePipe,
     BikeComponent,
     AdminComponent,
-    AdminModalComponent
+    AdminModalComponent,
+    DragDropDirective
 
   ],
   entryComponents: [AdminModalComponent],

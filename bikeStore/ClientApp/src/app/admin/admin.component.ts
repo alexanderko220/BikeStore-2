@@ -95,7 +95,8 @@ export class AdminComponent implements OnInit {
 
   openAddDialog() {
     const dialogRef = this.dialog.open(AdminModalComponent, {
-      width: '70%'
+      width: '90%',
+      disableClose: true
        });
     
     dialogRef.afterClosed().subscribe(result => {

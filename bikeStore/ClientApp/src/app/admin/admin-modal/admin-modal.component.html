@@ -8,7 +8,7 @@
                         [hideRequiredMarker]="hideRequiredControl"
                         [floatLabel]="floatLabelControl">
           <mat-label>Brand</mat-label>
-          <input matInput placeholder="Brand" required formControlName="brand" cdkFocusInitial>
+          <input matInput placeholder="Brand" [(ngModel)]="bike.brand" required formControlName="brand" cdkFocusInitial>
         </mat-form-field>
       </div>
       <div class="col-md-6 col-lg-3">
@@ -16,7 +16,7 @@
                         [hideRequiredMarker]="hideRequiredControl"
                         [floatLabel]="floatLabelControl">
           <mat-label>Model</mat-label>
-          <input matInput placeholder="Model" required formControlName="model">
+          <input matInput placeholder="Model" [(ngModel)]="bike.model" required formControlName="model">
         </mat-form-field>
       </div>
       <div class="col-md-4 col-lg-2">
@@ -24,11 +24,11 @@
                         [hideRequiredMarker]="hideRequiredControl"
                         [floatLabel]="floatLabelControl">
           <mat-label>Price</mat-label>
-          <input matInput placeholder="Price" required formControlName="price">
+          <input matInput placeholder="Price" [(ngModel)]="bike.price"  required formControlName="price">
         </mat-form-field>
       </div>
       <div class="col-md-6 col-lg-3" style="margin-top:18px;">
-        <mat-checkbox formControlName="isInStock">Is in stock</mat-checkbox>
+        <mat-checkbox [(ngModel)]="bike.isInStock"  formControlName="isInStock">Is in stock</mat-checkbox>
       </div>
     </div>
     <div class="row">
@@ -37,16 +37,58 @@
                         [hideRequiredMarker]="hideRequiredControl"
                         [floatLabel]="floatLabelControl">
           <mat-label>Caegory</mat-label>
-          <mat-select required [(ngModel)]="data" (selectionChange)="onCategoryChange()" formControlName="category">
+          <mat-select required [(ngModel)]="bike.categoryId" (selectionChange)="onCategoryChange()" formControlName="category">
             <mat-option *ngFor="let cat of categories" [value]="cat.id">
               {{cat.value}}
             </mat-option>
           </mat-select>
         </mat-form-field>
       </div>
+      <div class="col-md-6 col-lg-3">
+        <mat-form-field appearance="fill"
+                        [hideRequiredMarker]="hideRequiredControl"
+                        [floatLabel]="floatLabelControl">
+          <mat-label>Size</mat-label>
+          <mat-select required [(ngModel)]="bike.colorId" formControlName="size" multiple>
+            <mat-option *ngFor="let size of sizes" [value]="size.id">
+              {{size.value}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <mat-form-field appearance="fill"
+                        [hideRequiredMarker]="hideRequiredControl"
+                        [floatLabel]="floatLabelControl">
+          <mat-label>Color</mat-label>
+          <mat-select required [(ngModel)]="bike.sizeId" formControlName="color" multiple>
+            <mat-option *ngFor="let color of colors" [value]="color.id">
+              {{color.value}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
     </div>
-
-  </div>
+    <div class="row">
+        <div class="card-group col-lg-12 ">
+          <div class="card" [ngClass]="{'first': true}" *ngFor="let file of fileArr;let i= index" style="width: 160px;height: auto;" (click)="setAsThumbImg(i)">
+            <img class="card-img-top" [src]="sanitize(file['url'])" alt="{{ file.item.name }}">
+            <div title="{{ file.item.name }}" class="card-custom-body">
+              <button  mat-icon-button color="warn" aria-label="delete" title="Delete item" (click)="deleteAttachment(i)">
+                <mat-icon>delete_outline</mat-icon>
+              </button>
+            </div>
+            </div>
+        </div>
+    
+    </div>
+    <div class="row">
+      <div class="uploadfilecontainer" (click)="fileInput.click()" app-drag-n-drop (onFileDropped)="uploadFile($event)">
+        <div class="text-center">Choose bike images or drag here</div>
+        <input hidden type="file" accept='image/*' #fileInput (change)="uploadFile($event.target.files)">
+      </div>
+    </div>
+    </div>
   <div mat-dialog-actions align="end">
     <div class="p-1">
       <!--(click)="save()"-->
