@@ -11,8 +11,9 @@ namespace bikeStore.Data
         public DbSet<Bike> Bikes { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Specification> Specifications { get; set; }
-
+        
         #region Data for Seed
+        /*
         // for seed data only
         
         private readonly List<Category> _dummyCategories = new List<Category> {
@@ -164,7 +165,7 @@ namespace bikeStore.Data
         };
 
 
-
+        */
         #endregion
 
         public StoreDbContext(DbContextOptions<StoreDbContext> contextOptions) : base(contextOptions)
@@ -174,20 +175,28 @@ namespace bikeStore.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Bike>()
-                   .Property(p => p.Price)
-                   .HasColumnType("decimal(18,2)");
-            builder.Entity<BikesSpecifications>().HasKey(s => new { s.BikeId, s.SpecificationId });
-            builder.Entity<BikesColorSize>().HasKey(c => new { c.BikeId, c.ColorId, c.SizeId });
-            // if no data, seed db with dummy data
+            builder.Entity<Bike>().ToTable("Bikes");
+            builder.Entity<Bike>().Property(p => p.Price).HasColumnType("decimal(18,2)");
+            builder.Entity<Bike>().Property(p => p.Model).HasMaxLength(255);
+            builder.Entity<Bike>().Property(p => p.Brand).HasMaxLength(100);
+            
+            builder.Entity<Category>().ToTable("Categorys");
+            builder.Entity<Color>().ToTable("Colors");
+            builder.Entity<Specification>().ToTable("Specifications"); 
+            builder.Entity<Size>().ToTable("Sizes");
 
+            builder.Entity<BikesSpecifications>().HasKey(s => new { s.BikeId, s.SpecificationId });
+            builder.Entity<BikesColors>().HasKey(c => new { c.BikeId, c.ColorId });
+            builder.Entity<BikesSizes>().HasKey(c => new { c.BikeId, c.SizeId });
+            // if no data, seed db with dummy data
+            /*
             builder.Entity<Category>().HasData(_dummyCategories);
             builder.Entity<SpecificationCategory>().HasData(_dummySpecCategories);
             builder.Entity<Specification>().HasData(_dummySpecifications);
             builder.Entity<Bike>().HasData(_dummyBikes);
             builder.Entity<BikesSpecifications>().HasData(_dummyBikeSpecJunctions);
             //builder.Entity<BikeJunction>().HasData(_dummyBikeJunctions);
-
+            */
             base.OnModelCreating(builder);
         }
     }

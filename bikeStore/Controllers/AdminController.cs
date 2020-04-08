@@ -8,6 +8,7 @@ using bikeStore.Data.Repository;
 using BikeStore.Data.Entities;
 using BikeStore.Data.Repository;
 using BikeStore.Models;
+using BikeStore.Models.Bikes;
 using BikeStore.Models.Specifications;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,13 +20,14 @@ namespace BikeStore.Controllers
     [ApiController]
     public class AdminController : ControllerBase
     {
-        private readonly IBikeRepository _bikeRepository;
+        private readonly IBikeRepository _bikeRepo;
         private readonly ILogger<AdminController> _logger;
-        private readonly IRepo<Color> _colorRepository;
-        private readonly IRepo<Size> _sizeRepository;
-        private readonly ICategoryRepository _categoryRepository;
-        private readonly ISpecificationRepository _specificaionRepository;
-        private readonly IRepo<SpecificationCategory> _specificationCategoryRepository;
+        private readonly IRepo<Color> _colorRepo;
+        private readonly IRepo<Size> _sizeRepo;
+        private readonly ICategoryRepository _categoryRepo;
+        private readonly ISpecificationRepository _specificaionRepo;
+        private readonly IRepo<SpecificationCategory> _specificationCategoryRepo;
+        private readonly IRepo<ImgContent> _imgRepo;
         private readonly IMapper _mapper;
 
         public AdminController(IBikeRepository bikeRepository, 
@@ -35,25 +37,53 @@ namespace BikeStore.Controllers
                                ICategoryRepository categoryRepository,
                                ISpecificationRepository specificaionRepository,
                                IRepo<SpecificationCategory> specificationCategoryRepository,
+                               IRepo<ImgContent> imgRepo,
                                IMapper mapper)
         {
-            _bikeRepository = bikeRepository ?? throw new ArgumentNullException(nameof(bikeRepository));
+            _bikeRepo = bikeRepository ?? throw new ArgumentNullException(nameof(bikeRepository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _colorRepository = colorRepository ?? throw new ArgumentNullException(nameof(colorRepository));
-            _sizeRepository = sizeRepository ?? throw new ArgumentNullException(nameof(sizeRepository));
-            _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
-            _specificaionRepository = specificaionRepository ?? throw new ArgumentNullException(nameof(specificaionRepository));
-            _specificationCategoryRepository = specificationCategoryRepository ?? throw new ArgumentNullException(nameof(specificationCategoryRepository));
+            _colorRepo = colorRepository ?? throw new ArgumentNullException(nameof(colorRepository));
+            _sizeRepo = sizeRepository ?? throw new ArgumentNullException(nameof(sizeRepository));
+            _categoryRepo = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
+            _specificaionRepo = specificaionRepository ?? throw new ArgumentNullException(nameof(specificaionRepository));
+            _specificationCategoryRepo = specificationCategoryRepository ?? throw new ArgumentNullException(nameof(specificationCategoryRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _imgRepo = imgRepo ?? throw new ArgumentNullException(nameof(imgRepo));
         }
 
         [HttpGet]
         public async Task<IActionResult> GetBikesLis()
         {
-            var bikes = await _bikeRepository.GetBikesAsync();
-            if (bikes.Any())
-                return Ok(bikes);
-            else return NotFound();
+            try
+            {
+                var bikes = await _bikeRepo.GetBikesAsync();
+             
+                if (bikes.Any())
+                    return Ok(_mapper.Map<IEnumerable<Bike>, IEnumerable<BikeDTO>>(bikes));
+                else return NotFound();
+            }
+            catch (Exception e)
+            {
+                throw new Exception( $"{e.Message}");
+            }
+
+        }
+
+        [HttpGet]
+        [Route("img/{storeImgId}")]
+        public async Task<IActionResult> GetBikeImages( long storeImgId)
+        {
+            try
+            {
+                var images = await _imgRepo.GetRangeByConditionAsync(x => x.StoreImgId == storeImgId);
+                if (images.Any()) return Ok(images);
+
+                return  NotFound();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         [HttpGet]
@@ -62,7 +92,7 @@ namespace BikeStore.Controllers
         {
             try
             {
-                var colors = await _colorRepository.GetAllAsync();
+                var colors = await _colorRepo.GetAllAsync();
                 if (colors.Any())
                     return Ok(_mapper.Map<IEnumerable<Color>, IEnumerable<IdValue>>(colors));
                 else return NotFound();
@@ -81,7 +111,7 @@ namespace BikeStore.Controllers
         {
             try
             {
-                var sizes = await _sizeRepository.GetAllAsync();
+                var sizes = await _sizeRepo.GetAllAsync();
                 if (sizes.Any())
                     return Ok(_mapper.Map<IEnumerable<Size>, IEnumerable<IdValue>>(sizes));
                 else return NotFound();
@@ -100,7 +130,7 @@ namespace BikeStore.Controllers
         {
             try
             {
-                var categories = await _categoryRepository.GetCategoriesByConditionAsync(x => x.MainCatId == null);
+                var categories = await _categoryRepo.GetCategoriesByConditionAsync(x => x.MainCatId == null);
                 if (categories.Any())
                     return Ok(_mapper.Map<IEnumerable<Category>, IEnumerable<IdValue>>(categories));
                 else return NotFound();
@@ -119,7 +149,7 @@ namespace BikeStore.Controllers
         {
             try
             {
-                var categories = await _categoryRepository.GetCategoriesByConditionAsync(x => x.MainCatId == catId);
+                var categories = await _categoryRepo.GetCategoriesByConditionAsync(x => x.MainCatId == catId);
                 if (categories.Any())
                     return Ok(_mapper.Map<IEnumerable<Category>, IEnumerable<IdValue>>(categories));
                 else return NotFound();
@@ -138,7 +168,7 @@ namespace BikeStore.Controllers
         {
             try
             {
-                var categories = await _specificationCategoryRepository.GetRangeByConditionAsync( x => x.IsSpecCatActive);
+                var categories = await _specificationCategoryRepo.GetRangeByConditionAsync( x => x.IsSpecCatActive);
                 if (categories.Any())
                     return Ok(_mapper.Map<IEnumerable<SpecificationCategory>, IEnumerable<IdValue>>(categories));
                 else return NotFound();
@@ -157,7 +187,7 @@ namespace BikeStore.Controllers
         {
             try
             {
-                var specifications = await _specificaionRepository.GetSpecificationsByCategory(catId);
+                var specifications = await _specificaionRepo.GetSpecificationsByCategory(catId);
                 if (specifications.Any())
                     return Ok(_mapper.Map<IEnumerable<Specification>, IEnumerable<SpecificationDTO>>(specifications));
                 else return NotFound();

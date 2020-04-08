@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { IsLoadingService } from '@service-work/is-loading';
 
 
 
@@ -40,7 +41,7 @@ export class NavMenuComponent implements OnInit {
   };
 
   //#endregion Params
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private isLoadingService: IsLoadingService) { }
 
   @ViewChild('container', { read: ViewContainerRef, static: false })
   container: ViewContainerRef;
@@ -60,11 +61,12 @@ export class NavMenuComponent implements OnInit {
 
   ngOnInit() {
 
-    this.http.get<ICategory[]>("api/category").subscribe(response => {
-      this.categories = response;
+   let promise =  this.http.get<ICategory[]>("api/category").subscribe(categories => {
+      this.categories = categories;
       this.mainCatList = this.categories.filter(element => element.mainCatId === null);
+   });
 
-    });
+    this.isLoadingService.add(promise);
   };
 
   //#endregion Init

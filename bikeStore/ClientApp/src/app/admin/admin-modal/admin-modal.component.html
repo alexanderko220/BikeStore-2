@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>Create new bike</h1>
+<h1 mat-dialog-title>{{title}}</h1>
 
 <form autocomplete="off" [formGroup]="form" (ngSubmit)="save()">
   <div mat-dialog-content>
@@ -36,8 +36,8 @@
         <mat-form-field appearance="fill"
                         [hideRequiredMarker]="hideRequiredControl"
                         [floatLabel]="floatLabelControl">
-          <mat-label>Caegory</mat-label>
-          <mat-select required [(ngModel)]="bike.categoryId" (selectionChange)="onCategoryChange()" formControlName="category">
+          <mat-label>Main category</mat-label>
+          <mat-select required [(ngModel)]="bike.mainCategoryId" (selectionChange)="onCategoryChange(bike.mainCategoryId)" formControlName="mainCategory">
             <mat-option *ngFor="let cat of categories" [value]="cat.id">
               {{cat.value}}
             </mat-option>
@@ -48,8 +48,20 @@
         <mat-form-field appearance="fill"
                         [hideRequiredMarker]="hideRequiredControl"
                         [floatLabel]="floatLabelControl">
+          <mat-label>Sub category</mat-label>
+          <mat-select required [(ngModel)]="bike.categoryId"  formControlName="subCategory">
+            <mat-option *ngFor="let cat of subCategories" [value]="cat.id">
+              {{cat.value}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <mat-form-field appearance="fill"
+                        [hideRequiredMarker]="hideRequiredControl"
+                        [floatLabel]="floatLabelControl">
           <mat-label>Size</mat-label>
-          <mat-select required [(ngModel)]="bike.colorId" formControlName="size" multiple>
+          <mat-select required [(ngModel)]="bike.sizes" formControlName="size" multiple>
             <mat-option *ngFor="let size of sizes" [value]="size.id">
               {{size.value}}
             </mat-option>
@@ -61,7 +73,7 @@
                         [hideRequiredMarker]="hideRequiredControl"
                         [floatLabel]="floatLabelControl">
           <mat-label>Color</mat-label>
-          <mat-select required [(ngModel)]="bike.sizeId" formControlName="color" multiple>
+          <mat-select required [(ngModel)]="bike.colors" formControlName="color" multiple>
             <mat-option *ngFor="let color of colors" [value]="color.id">
               {{color.value}}
             </mat-option>
@@ -70,8 +82,8 @@
       </div>
     </div>
     <div class="row">
-        <div class="card-group col-lg-12 ">
-          <div class="card" [ngClass]="{'first': true}" *ngFor="let file of fileArr;let i= index" style="width: 160px;height: auto;" (click)="setAsThumbImg(i)">
+        <div class="card-deck col-lg-12 ">
+          <div class="card card-img" [ngClass]="{'card-img-active': file.isThumbImg}" *ngFor="let file of fileArr;let i= index" style="width: 160px;height: auto;" (click)="setAsThumbImg(i)">
             <img class="card-img-top" [src]="sanitize(file['url'])" alt="{{ file.item.name }}">
             <div title="{{ file.item.name }}" class="card-custom-body">
               <button  mat-icon-button color="warn" aria-label="delete" title="Delete item" (click)="deleteAttachment(i)">

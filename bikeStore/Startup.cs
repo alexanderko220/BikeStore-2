@@ -15,6 +15,7 @@ using BikeStore.Data.Entities;
 using BikeStore.Models.Dictionaries;
 using BikeStore.Models.Specifications;
 using bikeStore.Data.Entities;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace bikeStore
 {
@@ -36,6 +37,7 @@ namespace bikeStore
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                     .AddJsonOptions( options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
+            #region Dependency Injection Config
             services.AddScoped(typeof(IRepo<>), typeof(BaseRepo<>));
             services.AddScoped(typeof(IRepo<Color>), typeof(BaseRepo<Color>));
             services.AddScoped(typeof(IRepo<Size>), typeof(BaseRepo<Size>));
@@ -43,18 +45,23 @@ namespace bikeStore
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ISpecificationRepository, SpecificationRepository>();
             services.AddScoped(typeof(IRepo<SpecificationCategory>), typeof(BaseRepo<SpecificationCategory>));
+            services.AddScoped(typeof(IRepo<BikesColors>), typeof(BaseRepo<BikesColors>));
+            services.AddScoped(typeof(IRepo<BikesSizes>), typeof(BaseRepo<BikesSizes>));
+            #endregion
 
+            #region Mapper Config
             //services.AddAutoMapper(typeof(MappingProfile));
             var mappingConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new BikeProfile());
-                mc.AddProfile( new CategoryProfile());
+                mc.AddProfile(new CategoryProfile());
                 mc.AddProfile(new CategoryDictionaryProfile());
                 mc.AddProfile(new ColorProfile());
                 mc.AddProfile(new SizeProfile());
                 mc.AddProfile(new SpecificationCategoryProfile());
                 mc.AddProfile(new SpecificationProfile());
             });
+            #endregion
 
             services.AddSingleton(mappingConfig.CreateMapper());
 
@@ -62,6 +69,13 @@ namespace bikeStore
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
+            });
+
+            // To avoid the MultiPartBodyLength error
+            services.Configure<FormOptions>(o => {
+                o.ValueLengthLimit = 1024;
+                o.MultipartBodyLengthLimit = 2500000;
+                o.MemoryBufferThreshold = 1024 * 1024 * 4;
             });
         }
 

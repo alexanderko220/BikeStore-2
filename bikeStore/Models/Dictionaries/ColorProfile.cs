@@ -9,7 +9,7 @@ namespace BikeStore.Models.Dictionaries
         public ColorProfile()
         {
             CreateMap<Color, IdValue>()
-                .ForMember( c => c.Id, ex => ex.MapFrom(x => x.ColorValue as object))
+                .ForMember( c => c.Id, ex => ex.MapFrom(x => x.ColorId as object))
                 .ForMember( c => c.Value, ex => ex.MapFrom( x => x.ColorName))
                 ;
         }

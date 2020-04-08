@@ -47,6 +47,7 @@
 
   <ItemGroup>
     <Folder Include="ClientApp\src\app\services\" />
+    <Folder Include="Models\Admin\" />
     <Folder Include="wwwroot\content\images\" />
   </ItemGroup>
 

@@ -3,6 +3,11 @@
 <body>
   <app-nav-menu></app-nav-menu>
   <div class="container-fluid" style="margin-top: 80px;">
+    <mat-progress-bar *ngIf="isLoading | async"
+                      mode="indeterminate"
+                      style="position: absolute; top: 50px; z-index: 5000;">
+    </mat-progress-bar>
+    
     <router-outlet></router-outlet>
   </div>
 </body>

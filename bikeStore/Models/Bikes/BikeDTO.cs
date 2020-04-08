@@ -7,16 +7,17 @@ namespace BikeStore.Models.Bikes
 {
     public class BikeDTO
     {
-        public long BId { get; set; }
-        public string BBrand { get; set; }
-        public string BModel { get; set; }
-        public IEnumerable<IdValue> BSizes { get; set; }
-        public IEnumerable<IdValue> BColors { get; set; }
+        public long BikeId { get; set; }
+        public string Brand { get; set; }
+        public string Model { get; set; }
+        public IEnumerable<long> Sizes { get; set; }
+        public IEnumerable<long> Colors { get; set; }
         public bool IsInStock { get; set; }
-        public decimal? BPrice { get; set; }
-        public byte[] BThumbImgContent { get; set; }
-        public long BCategoryId { get; set; }
-        public long BImgId { get; set; }
+        public string Price { get; set; }
+        public string ThumbBase64 { get; set; }
+        public long CategoryId { get; set; }
+        public long? MainCategoryId { get; set; }
+        public long? ImgId { get; set; }
         
     }
 }

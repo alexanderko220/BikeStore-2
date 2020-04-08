@@ -45,3 +45,18 @@
     .files-list .delete-file img {
       width: 30px;
     }
+
+.card-img {
+  transition: box-shadow .3s;
+}
+
+  .card-img:hover {
+    box-shadow: 0 0 11px rgba(33,33,33,.2);
+  }
+.card-img-active {
+  border: 1.5px solid;
+  border-color: #6dd68e;
+}
+.card-img-active:hover {
+  box-shadow: 0 0 11px rgba(7, 179, 61,.2);
+}

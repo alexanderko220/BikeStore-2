@@ -24,8 +24,8 @@ namespace bikeStore.Data.Repository
             try
             {
                 _logger.LogInformation($"run GetBikesByCategoryAsync, catId = {catId}");
-                //return await GetRangeByConditionAsync(x => x.BCategoryId == catId && x.IsInStock == true);
-                return await GetWithInclude(x => x.CategoryId == catId && x.IsInStock == true);
+                
+                return await GetWithInclude(x => x.CategoryId == catId && x.IsInStock == true, c=> c.Category);
             }
             catch (Exception ex)
             {
@@ -41,8 +41,8 @@ namespace bikeStore.Data.Repository
                 _logger.LogInformation($"GetBikeAsync id={id}");
                 return await _context.Bikes.Where(x => x.BikeId == id)
                     .Include(s => s.Specifications).ThenInclude(i => i.Specification)
-                    .Include(c => c.ColorSize).ThenInclude(s => s.Size)
-                    .Include(c => c.ColorSize).ThenInclude(s => s.Color)
+                    .Include(c => c.Colors).ThenInclude(s => s.Color)
+                    .Include(c => c.Sizes).ThenInclude(s => s.Size)
                     .Include(i => i.Images).ThenInclude(c => c.ImgContents)
                     .FirstOrDefaultAsync();
             }
@@ -58,7 +58,9 @@ namespace bikeStore.Data.Repository
             try
             {
                 _logger.LogInformation("run GetBikesAsync");
-                return await GetAllAsync();
+                return await _context.Bikes.Include(c => c.Category)
+                                           .Include(c => c.Colors).ThenInclude(s => s.Color)
+                                           .Include(c => c.Sizes).ThenInclude(s => s.Size).Take(500).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -207,6 +209,11 @@ namespace bikeStore.Data.Repository
             }
         }
 
+
+        //public async Task<bool> SaveChangesAsync()
+        //{
+        //    return await SaveChangesAsync();
+        //}
         #endregion CRUD
     }
 }

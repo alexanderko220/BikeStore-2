@@ -57,7 +57,7 @@ namespace bikeStore.Data.Repository
 
         public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
         {
-            return await _dbSet.ToArrayAsync();
+            return await _dbSet.ToListAsync();
         }
 
         public virtual async Task<TEntity> GetByConditionAsync(Expression<Func<TEntity, bool>> expression)
@@ -67,12 +67,12 @@ namespace bikeStore.Data.Repository
 
         public virtual async Task<IEnumerable<TEntity>> GetRangeByConditionAsync(Expression<Func<TEntity, bool>> expression)
         {
-            return await _dbSet.Where(expression).ToArrayAsync();
+            return await _dbSet.Where(expression).ToListAsync();
         }
 
         public virtual async Task<IEnumerable<TEntity>> GetWithInclude(params Expression<Func<TEntity, object>>[] includeProperties)
         {
-            return await Include(includeProperties).ToArrayAsync();
+            return await Include(includeProperties).ToListAsync();
         }
 
         public virtual async Task<IEnumerable<TEntity>> GetWithInclude(Func<TEntity, bool> predicate,

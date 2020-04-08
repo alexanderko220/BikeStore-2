@@ -57,7 +57,9 @@ import { BikeComponent } from './bike/bike.component';
 import { AdminComponent } from './admin/admin.component';
 import { AdminModalComponent } from './admin/admin-modal/admin-modal.component';
 import { DragDropDirective } from './directives/drag-drop.directive';
-
+import { IsLoadingModule } from '@service-work/is-loading';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { ButtonRenderComponent } from './ag-render/button-render/button-render.component';
 
 @NgModule({
   declarations: [
@@ -69,8 +71,8 @@ import { DragDropDirective } from './directives/drag-drop.directive';
     BikeComponent,
     AdminComponent,
     AdminModalComponent,
-    DragDropDirective
-
+    DragDropDirective,
+    ButtonRenderComponent
   ],
   entryComponents: [AdminModalComponent],
   imports: [
@@ -80,6 +82,8 @@ import { DragDropDirective } from './directives/drag-drop.directive';
     FormsModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    IsLoadingModule,
+    Ng2SearchPipeModule,
     //RouterModule.forRoot([
     //  { path: '', component: HomeComponent, pathMatch: 'full' },
     //  { path: 'counter', component: CounterComponent },
@@ -123,7 +127,7 @@ import { DragDropDirective } from './directives/drag-drop.directive';
     CdkTableModule,
     CdkTreeModule,
     MatFormFieldModule,
-    AgGridModule.withComponents([])
+    AgGridModule.withComponents([ButtonRenderComponent])
   ],
   providers: [],
   bootstrap: [AppComponent]

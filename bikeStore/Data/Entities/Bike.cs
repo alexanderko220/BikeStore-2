@@ -13,12 +13,13 @@ namespace bikeStore.Data.Entities
         public string Model { get; set; }
         public bool IsInStock { get; set; }
         public decimal? Price { get; set; }
-        public byte[] ThumbImgContent { get; set; }
+        public string ThumbBase64 { get; set; }
         public long CategoryId { get; set; }
         public Category Category { get; set; }
         public long ImgId { get; set; }
         public StoreImages Images { get; set; }
         public IEnumerable<BikesSpecifications> Specifications { get; set; }
-        public IEnumerable<BikesColorSize> ColorSize { get; set; }
+        public IEnumerable<BikesColors> Colors { get; set; }
+        public IEnumerable<BikesSizes> Sizes { get; set; }
     }
 }

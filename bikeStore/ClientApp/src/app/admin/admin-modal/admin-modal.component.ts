@@ -4,23 +4,14 @@ import { HttpClient } from '@angular/common/http';
 import { forkJoin, Observable } from 'rxjs';
 import { MatDialogRef } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
+import { MAT_DIALOG_DATA } from '@angular/material';
+import { Inject } from '@angular/core';
+import { IBikeCreation } from '../admin.component';
+import { IsLoadingService } from '@service-work/is-loading';
 
 export interface IDictionaryConainer {
   id: any,
   value: string
-}
-
-export interface IBikeCreation {
-  bikeId: number,
-  brand: string,
-  model: string,
-  isInStock: boolean,
-  price: number,
-  thumbImgConten: Blob,
-  categoryId: number,
-  storeImages: File[],
-  colors: number [],
-  sizes: number []
 }
 
 
@@ -32,43 +23,58 @@ export interface IBikeCreation {
 
 export class AdminModalComponent implements OnInit {
 
+  //#region Params
+
   fileArr: any = [];
-  imgArr:  any = [];
+  imgArr: any = [];
   fileObj: any = [];
   form: FormGroup;
   colors: IDictionaryConainer[] = [];
   sizes: IDictionaryConainer[] = [];
   categories: IDictionaryConainer[] = [];
+  subCategories: IDictionaryConainer[] = [];
   bike: IBikeCreation = null;
-  defaultBike: IBikeCreation = {
-    bikeId: null,
-    brand: null,
-    model: null,
-    isInStock: true,
-    price: null,
-    thumbImgConten: null,
-    categoryId: null,
-    storeImages: null,
-    colors: [],
-    sizes: []
-  }
+  title: string = null;
 
-  constructor(private fb: FormBuilder, private http: HttpClient, private dialogRef: MatDialogRef<AdminModalComponent>, private sanitizer: DomSanitizer) {
+  constructor(private fb: FormBuilder,
+    private http: HttpClient,
+    private dialogRef: MatDialogRef<AdminModalComponent>,
+    private sanitizer: DomSanitizer,
+    @Inject(MAT_DIALOG_DATA) private modalData: any,
+    private isLoadingService: IsLoadingService) {
+
+   
     this.form = fb.group({
-      category: new FormControl(null, Validators.required),
+      mainCategory: new FormControl(null, Validators.required),
+      subCategory: new FormControl(null, Validators.required),
       model: new FormControl(null, Validators.required),
       brand: new FormControl(null, Validators.required),
-      price: new FormControl(null, [Validators.required, Validators.pattern('^([1-9][0-9]{,2}(,[0-9]{3})*|[0-9]+)(\.[0-9]{1,9})?$')]),
+      price: new FormControl(null, [Validators.required, Validators.pattern(/(^\d+([,.]\d+)?$)|((^\d{1,3}(,\d{3})+(\.\d+)?)$)|((^\d{1,3}(\.\d{3})+(,\d+)?)$)/)]),
       isInStock: new FormControl(null),
       hideRequiredControl: new FormControl(false),
       floatLabelControl: new FormControl('auto'),
       color: new FormControl(null, Validators.required),
-      size: new FormControl(null, Validators.required),
+      size: new FormControl(null, Validators.required)
     });
   }
 
-  onCategoryChange() {
-    console.log('works!')
+  //#endregion Params
+
+  //#region Helpers
+  
+  //#endregion Helpers
+
+  onCategoryChange(catId: number) {
+    if (catId) {
+
+      this.bike.subCategoryId = null;
+
+      this.http.get<IDictionaryConainer[]>("api/admin/category/" + catId)
+        .subscribe(response => {
+          this.subCategories = response;
+          console.log(this.subCategories);
+        });
+    }  
   }
 
   uploadFile(e) {
@@ -84,11 +90,7 @@ export class AdminModalComponent implements OnInit {
       } 
       
     })
-
-    this.fileArr.forEach((item) => {
-      this.fileObj.push(item.item)
-    })
-
+    this.fileArr[0].isThumbImg = true;
   }
 
   // Clean Url
@@ -102,18 +104,22 @@ export class AdminModalComponent implements OnInit {
 
   setAsThumbImg(index) {
 
-  }
-
-  save() {
-    if (this.form.valid) {
-      const formData = { ...this.form.value };
-      formData.Files = this.fileObj;
-
-      //console.log(formData)
-      this.dialogRef.close(formData);
+    for (let i = 0; i < this.fileArr.length; i++) {
+      if (i === index) {
+        this.fileArr[i].isThumbImg = true;
+      } else {
+        this.fileArr[i].isThumbImg = false;
+      }
     }
-   
   }
+
+  async save() {
+    if (this.form.valid) {
+      this.dialogRef.close({ bike: this.bike, fileArr: this.fileArr});
+    }
+  }
+
+  //#region Init
 
   initDictionaries(): Observable<any> {
     const r1 = this.http.get<IDictionaryConainer[]>("api/admin/color")
@@ -127,17 +133,22 @@ export class AdminModalComponent implements OnInit {
     const r3 = this.http.get<IDictionaryConainer[]>("api/admin/category")
       .subscribe(response => {
         this.categories = response;
-        console.log(this.categories);
                 });
     return forkJoin([r1, r2, r3]);
 
   }
 
-
   ngOnInit() {
-
-    this.bike = Object.assign({}, this.defaultBike);
-    this.initDictionaries();
+    this.bike = Object.assign({}, this.modalData.data);
+    this.isLoadingService.add(this.initDictionaries());
+    
+    if (this.modalData.isEdit) {
+      this.title = 'Edit bike';
+      this.onCategoryChange(this.bike.mainCategoryId);
+    } else {
+      this.title = 'Create bike';
+    }
   }
 
+  //#endregion Init
 }

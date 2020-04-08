@@ -6,7 +6,7 @@
           <h5 class="modal-title">Bikes list</h5>
         </div>
         <div class="col-md-1 float-right">
-          <button type="button" (click)="openAddDialog()" class="btn btn-outline-primary mr-auto"><mat-icon aria-hidden="false">add</mat-icon></button>
+          <button type="button" (click)="addBike()" class="btn btn-outline-primary mr-auto"><mat-icon aria-hidden="false">add</mat-icon></button>
         </div>
       </div>
       
@@ -24,6 +24,7 @@
                        [domLayout]="domLayout"
                        [animateRows]="true"
                        [rowHeight]="rowHeight"
+                       [frameworkComponents]="frameworkComponents"
                        (gridReady)="onGridReady($event)">
 
       </ag-grid-angular>

@@ -16,5 +16,6 @@ namespace bikeStore.Data.Repository
         void UpdateBikes(IEnumerable<Bike> bikes);
         void DeleteBike(Bike bike);
         void DeleteBikes(IEnumerable<Bike> bikes);
+        Task<bool> SaveChangesAsync();
     }
 }

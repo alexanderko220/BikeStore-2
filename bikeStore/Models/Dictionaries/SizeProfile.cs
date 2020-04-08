@@ -9,7 +9,7 @@ namespace BikeStore.Models.Dictionaries
         public SizeProfile()
         {
             CreateMap<Size, IdValue>()
-               .ForMember(c => c.Id, ex => ex.MapFrom(x => x.SizeValue as object))
+               .ForMember(c => c.Id, ex => ex.MapFrom(x => x.SizeId as object))
                .ForMember(c => c.Value, ex => ex.MapFrom(x => x.SizeName))
                ;
         }
