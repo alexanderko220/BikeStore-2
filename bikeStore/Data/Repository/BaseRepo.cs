@@ -75,6 +75,13 @@ namespace bikeStore.Data.Repository
             return await Include(includeProperties).ToListAsync();
         }
 
+        public virtual async Task<TEntity> GetFirstWithInclude(Func<TEntity, bool> predicate,
+            params Expression<Func<TEntity, object>>[] includeProperties)
+        {
+            var result = await Include(includeProperties).ToListAsync();
+            return result.Where(predicate).FirstOrDefault();
+        }
+
         public virtual async Task<IEnumerable<TEntity>> GetWithInclude(Func<TEntity, bool> predicate,
         params Expression<Func<TEntity, object>>[] includeProperties)
         {

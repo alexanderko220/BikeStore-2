@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params} from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { IBike } from "../interfaces/interfaces";
 
-export interface IBike {
-
-}
 
 @Component({
   selector: 'app-bike',

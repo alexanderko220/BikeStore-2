@@ -10,6 +10,6 @@ namespace BikeStore.Data.Entities
         public long ColorId { get; set; }
         public string ColorValue { get; set; }
         public string ColorName { get; set; }
-        public IEnumerable<BikesColors> BikesColorSize { get; set; }
+        public IEnumerable<BikesColors> BikesColors { get; set; }
     }
 }

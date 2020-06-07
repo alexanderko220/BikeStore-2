@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace bikeStore.Data.Entities
 {
+    /// <summary>
+    /// Many To Many relation between Bikes and Specifications
+    /// </summary>
     public class BikesSpecifications
     {
         [Key]

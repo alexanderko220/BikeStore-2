@@ -25,7 +25,7 @@ namespace bikeStore.Data.Repository
             {
                 _logger.LogInformation($"run GetBikesByCategoryAsync, catId = {catId}");
                 
-                return await GetWithInclude(x => x.CategoryId == catId && x.IsInStock == true, c=> c.Category);
+                return await GetWithInclude(x => x.CategoryId == catId && x.IsInStock, c=> new object[]{ c.Category });
             }
             catch (Exception ex)
             {
@@ -60,7 +60,7 @@ namespace bikeStore.Data.Repository
                 _logger.LogInformation("run GetBikesAsync");
                 return await _context.Bikes.Include(c => c.Category)
                                            .Include(c => c.Colors).ThenInclude(s => s.Color)
-                                           .Include(c => c.Sizes).ThenInclude(s => s.Size).Take(500).ToListAsync();
+                                           .Include(c => c.Sizes).ThenInclude(s => s.Size).Take(500).OrderBy( c=> c.Category.CatName).ToListAsync();
             }
             catch (Exception ex)
             {

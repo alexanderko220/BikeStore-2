@@ -170,7 +170,7 @@ namespace bikeStore.Data
 
         public StoreDbContext(DbContextOptions<StoreDbContext> contextOptions) : base(contextOptions)
         {
-
+            //ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -180,11 +180,11 @@ namespace bikeStore.Data
             builder.Entity<Bike>().Property(p => p.Model).HasMaxLength(255);
             builder.Entity<Bike>().Property(p => p.Brand).HasMaxLength(100);
             
-            builder.Entity<Category>().ToTable("Categorys");
+            builder.Entity<Category>().ToTable("Categories");
             builder.Entity<Color>().ToTable("Colors");
             builder.Entity<Specification>().ToTable("Specifications"); 
             builder.Entity<Size>().ToTable("Sizes");
-
+            //  join tables for implementation many to many relations
             builder.Entity<BikesSpecifications>().HasKey(s => new { s.BikeId, s.SpecificationId });
             builder.Entity<BikesColors>().HasKey(c => new { c.BikeId, c.ColorId });
             builder.Entity<BikesSizes>().HasKey(c => new { c.BikeId, c.SizeId });

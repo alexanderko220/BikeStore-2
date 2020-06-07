@@ -1,25 +1,16 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, ViewChild, Inject } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { AgGridAngular } from 'ag-grid-angular';
 import { AllCommunityModules, Module } from "@ag-grid-community/all-modules";
 import { MatDialog } from '@angular/material/dialog';
 import { AdminModalComponent } from './admin-modal/admin-modal.component';
 import { IsLoadingService } from '@service-work/is-loading';
 import { ButtonRenderComponent } from '../ag-render/button-render/button-render.component';
-
-
-export interface IBikeCreation {
-  bikeId: number;
-  brand: string;
-  model: string;
-  isInStock: boolean;
-  price: number;
-  thumbImgContent: string | ArrayBuffer;
-  mainCategoryId: number;
-  categoryId: number;
-  colors: number[];
-  sizes: number[];
-}
+import { FileHelperService } from "../services/fileHelper.service";
+import { IBikeCreation, IBikeDto } from "../interfaces/interfaces";
+import { DOCUMENT, LocationStrategy } from '@angular/common';
+import { throwError } from 'rxjs/internal/observable/throwError';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-admin',
@@ -37,11 +28,14 @@ export class AdminComponent implements OnInit {
     model: null,
     isInStock: true,
     price: null,
-    thumbImgContent: null,
+    thumbBase64: null,
     mainCategoryId: null,
     categoryId: null,
     colors: [],
-    sizes: []
+    sizes: [],
+    thumbFileName: null,
+    junkColors: [],
+    junkSizes: []
   }
 
   @ViewChild('agGrid', { static: false }) agGrid: AgGridAngular;
@@ -56,7 +50,8 @@ export class AdminComponent implements OnInit {
   private rowHeight;
   private frameworkComponents: any;
 
-  constructor(private http: HttpClient, private dialog: MatDialog, private isLoadingService: IsLoadingService) {
+  constructor(private http: HttpClient, private dialog: MatDialog, private isLoadingService: IsLoadingService,
+    private fileService: FileHelperService) {
 
     this.defaultColDef = {
       enableRowGroup: true,
@@ -69,44 +64,67 @@ export class AdminComponent implements OnInit {
     this.domLayout = "autoHeight";
     this.rowHeight = 34;
     this.frameworkComponents = {
-      buttonRenderer: ButtonRenderComponent,
+      buttonRenderer: ButtonRenderComponent
     }
+   
   }
 
   //#region Helpers
 
-  async toBase64(file: File): Promise<string | ArrayBuffer> {
-    return new Promise<string | ArrayBuffer>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = error => reject(error);
-    });
-  }
-
   async createFormData(bike: IBikeCreation, fileArr: any): Promise<FormData> {
     const formData = new FormData();
     // put all files
-    fileArr.map((file, index) => {
-      return formData.append('file' + index, file.item, file.item.name);
+    fileArr.map((file) => {
+      return formData.append('files[]', file.item, file.item.name);
     });
 
     // set one img as Thumb
-    let file = fileArr.filter(x => x.isThumbImg)[0];
-    let base64String = file ? (await this.toBase64(file.item)) : '';
-    formData.append('thumbBase64', base64String.toString());
+    const file = fileArr.filter(x => x.isThumbImg)[0];
+    bike.thumbBase64 = file ? (await this.fileService.toBase64(file.item)) : null;
+    bike.thumbFileName = file ? file.item.name : null;
+   // if (base64String) bike.thumbBase64 = base64String.toString();
 
-    for (var key in bike) {
-      formData.append(key, bike[key]);
-    }
+    //bike.junkColors.forEach(jC => {
+    //  jC.bike = null;
+    //  jC.color = null;
+    //});
+
+    //bike.junkSizes.forEach(jS => {
+    //  jS.bike = null;
+    //  jS.size = null;
+    //});
+
+
+    formData.append('bike', JSON.stringify(bike));
 
     return formData;
   }
 
+  private handleError(error: HttpErrorResponse) {
+    if (error.error instanceof ErrorEvent) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error.message);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong,
+      console.error(
+        `Backend returned code ${error.status}, ` +
+        `body was: ${error.error}`);
+    }
+    // return an observable with a user-facing error message
+    return throwError(
+      'Something bad happened; please try again later.');
+  };
+
   //#endregion
-
-
   columnDefs = [
+    {
+      headerName: 'Category',
+      field: 'categoryName',
+      sortable: true,
+      filter: true,
+      flex: 2
+    },
     {
       headerName: 'Name',
       field: 'brand',
@@ -151,7 +169,7 @@ export class AdminComponent implements OnInit {
       headerName: '',
       minWidth: 60,
       maxWidth: 60,
-      cellRenderer: 'buttonRenderer' ,
+      cellRenderer: 'buttonRenderer',
       cellRendererParams: {
         onClick: this.editBike.bind(this),
         label: 'Click'
@@ -174,10 +192,14 @@ export class AdminComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
+      if (result && result !== 'false') {
         const formDataPromise = this.createFormData(result.bike, result.fileArr);
         formDataPromise.then(bike => {
-          this.http.post('api/bikes/bike', bike).subscribe(
+          this.http.post('api/bikes/bike', bike)
+            .pipe(
+              catchError(this.handleError)
+            )
+            .subscribe(
             data => {
               this.getBikeList();
             },
@@ -187,7 +209,7 @@ export class AdminComponent implements OnInit {
             }
           );
 
-        })
+        });
       }
     });
   }
@@ -207,21 +229,25 @@ export class AdminComponent implements OnInit {
       }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        let formDataPromise = this.createFormData(result.bike, result.fileArr);
-        formDataPromise.then(bike => {
-          this.http.post('api/bikes/bike', bike).subscribe(
-            data => {
-              this.getBikeList();
-            },
-            error => {
-              console.log('oops', error);
-              this.openEditDialog(result.bike);
-            }
-          );
 
-        })
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result !== 'false') {
+        const formDataPromise = this.createFormData(result.bike, result.fileArr);
+        formDataPromise.then(bike => {
+          this.http.put(`api/bikes/bike`, bike)
+            .pipe(
+              catchError(this.handleError)
+            )
+            .subscribe(
+              data => {
+                this.getBikeList();
+              },
+              error => {
+                console.log('oops', error);
+                this.openEditDialog(result.bike);
+              }
+            );
+        });
       }
     });
   }
@@ -236,8 +262,7 @@ export class AdminComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
-    this.gridApi.addEventListener('click', this.editBike)
-    ;
+    this.gridApi.addEventListener('click', this.editBike);
   }
 
   onFirstDataRendered(params) {
@@ -245,10 +270,12 @@ export class AdminComponent implements OnInit {
   }
 
   getBikeList() {
-    let promise = this.http.get("api/admin").subscribe(data => {
-      this.rowData = data;
-    }, error => { console.log(error) }
-    )
+    const promise = this.http.get<IBikeDto>("api/admin").subscribe(data => {
+        this.rowData = data;
+      },
+      error => {
+        console.log(error);
+      });
     this.isLoadingService.add(promise);
   }
 

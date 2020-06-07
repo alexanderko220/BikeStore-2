@@ -10,8 +10,8 @@ using bikeStore.Data;
 namespace BikeStore.Migrations
 {
     [DbContext(typeof(StoreDbContext))]
-    [Migration("20200328095632_Initial")]
-    partial class Initial
+    [Migration("20200510085428_db_changes#1")]
+    partial class db_changes1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -178,6 +178,8 @@ namespace BikeStore.Migrations
                     b.Property<string>("ImgContentName");
 
                     b.Property<DateTime?>("ImgCreateDt");
+
+                    b.Property<bool>("IsThumbnail");
 
                     b.Property<long>("StoreImgId");
 

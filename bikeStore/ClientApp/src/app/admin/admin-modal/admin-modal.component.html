@@ -82,10 +82,10 @@
       </div>
     </div>
     <div class="row">
-        <div class="card-deck col-lg-12 ">
-          <div class="card card-img" [ngClass]="{'card-img-active': file.isThumbImg}" *ngFor="let file of fileArr;let i= index" style="width: 160px;height: auto;" (click)="setAsThumbImg(i)">
+        <div class="card-deck img-container">
+          <div class="card" [ngClass]="{'card-img-active': file.isThumbImg}" *ngFor="let file of fileArr;let i= index" style="width: 160px;height: auto;" (click)="setAsThumbImg(i)">
             <img class="card-img-top" [src]="sanitize(file['url'])" alt="{{ file.item.name }}">
-            <div title="{{ file.item.name }}" class="card-custom-body">
+            <div title="{{ file.item.name }}" class="card-custom-body ml-auto">
               <button  mat-icon-button color="warn" aria-label="delete" title="Delete item" (click)="deleteAttachment(i)">
                 <mat-icon>delete_outline</mat-icon>
               </button>

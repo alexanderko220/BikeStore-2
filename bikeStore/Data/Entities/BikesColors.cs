@@ -1,17 +1,18 @@
-﻿using bikeStore.Data.Entities;
-using System;
-using System.Collections.Generic;
+﻿using System;
+using bikeStore.Data.Entities;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BikeStore.Data.Entities
 {
+    /// <summary>
+    /// Many To Many relation between Bikes and Colors
+    /// </summary>
     public class BikesColors
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+       
         public long Id { get; set; }
         public long BikeId { get; set; }
         public long ColorId { get; set; }

@@ -60,3 +60,7 @@
 .card-img-active:hover {
   box-shadow: 0 0 11px rgba(7, 179, 61,.2);
 }
+
+.img-container {
+  padding: 5px 15px;
+}

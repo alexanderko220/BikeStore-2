@@ -1,13 +1,12 @@
 ﻿using bikeStore.Data.Entities;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BikeStore.Data.Entities
-{
+{   
+    /// <summary>
+    /// Many To Many relation between Bikes and Sizes
+    /// </summary>
     public class BikesSizes
     {
         [Key]

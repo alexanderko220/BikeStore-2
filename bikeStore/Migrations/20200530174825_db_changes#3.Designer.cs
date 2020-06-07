@@ -10,8 +10,8 @@ using bikeStore.Data;
 namespace BikeStore.Migrations
 {
     [DbContext(typeof(StoreDbContext))]
-    [Migration("20200328095632_Initial")]
-    partial class Initial
+    [Migration("20200530174825_db_changes#3")]
+    partial class db_changes3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -162,7 +162,7 @@ namespace BikeStore.Migrations
 
                     b.HasKey("CatId");
 
-                    b.ToTable("Categorys");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("bikeStore.Data.Entities.ImgContent", b =>
@@ -178,6 +178,8 @@ namespace BikeStore.Migrations
                     b.Property<string>("ImgContentName");
 
                     b.Property<DateTime?>("ImgCreateDt");
+
+                    b.Property<bool>("IsThumbnail");
 
                     b.Property<long>("StoreImgId");
 
@@ -252,7 +254,7 @@ namespace BikeStore.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("BikeStore.Data.Entities.Size")
-                        .WithMany("BikesColors")
+                        .WithMany("BikesSizes")
                         .HasForeignKey("SizeId");
                 });
 

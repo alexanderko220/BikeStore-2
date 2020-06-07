@@ -25,7 +25,7 @@ export class DragDropDirective {
   @HostListener('dragleave', ['$event']) public dragLeave(event) {
     event.preventDefault();
     event.stopPropagation();
-    this.background = '#ffffff'
+    this.background = '#ffffff';
   }
 
   // Drop Event
@@ -35,7 +35,7 @@ export class DragDropDirective {
     this.background = '#ffffff';
     const files = event.dataTransfer.files;
     if (files.length > 0) {
-      this.onFileDropped.emit(files)
+      this.onFileDropped.emit(files);
     }
   }
 

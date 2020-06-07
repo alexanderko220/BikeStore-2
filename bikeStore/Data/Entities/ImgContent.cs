@@ -12,6 +12,7 @@ namespace bikeStore.Data.Entities
 
         public string  ImgContentMimeType { get; set; }
 
+        public bool IsThumbnail { get; set; }
         public DateTime? ImgCreateDt { get; set; }
 
         public byte[] Content { get; set; }

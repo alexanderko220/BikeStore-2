@@ -8,6 +8,7 @@ using bikeStore.Data.Repository;
 using BikeStore.Data.Entities;
 using BikeStore.Data.Repository;
 using BikeStore.Models;
+using BikeStore.Models.Admin;
 using BikeStore.Models.Bikes;
 using BikeStore.Models.Specifications;
 using Microsoft.AspNetCore.Http;
@@ -76,7 +77,7 @@ namespace BikeStore.Controllers
             try
             {
                 var images = await _imgRepo.GetRangeByConditionAsync(x => x.StoreImgId == storeImgId);
-                if (images.Any()) return Ok(images);
+                if (images.Any()) return Ok(_mapper.Map<IEnumerable<ImgContent>, IEnumerable<FileDTO>>(images));
 
                 return  NotFound();
             }
@@ -187,15 +188,36 @@ namespace BikeStore.Controllers
         {
             try
             {
-                var specifications = await _specificaionRepo.GetSpecificationsByCategory(catId);
-                if (specifications.Any())
-                    return Ok(_mapper.Map<IEnumerable<Specification>, IEnumerable<SpecificationDTO>>(specifications));
+                var specs = await _specificaionRepo.GetSpecificationsByCategory(catId);
+                if (specs.Any())
+                    return Ok(_mapper.Map<IEnumerable<Specification>, IEnumerable<SpecificationDTO>>(specs));
                 else return NotFound();
             }
             catch (Exception ex)
             {
 
                 throw new Exception(ex.Message);
+            }
+        }
+
+        [HttpDelete]
+        [Route("img/{id}")]
+        public async Task<IActionResult> DeleteImage(long id)
+        {
+            try
+            {
+                var img = await _imgRepo.GetByConditionAsync( i => i.ImgContentId == id);
+
+                if(img == null) return NotFound();
+
+                _imgRepo.Delete(img);
+                await _imgRepo.SaveChangesAsync().ConfigureAwait(false);
+                return Ok();
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"{e.Message}");
             }
         }
     }

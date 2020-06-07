@@ -2,17 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { IsLoadingService } from '@service-work/is-loading';
+import { IBike } from "../interfaces/interfaces";
 
-export interface IBike {
-  bikeId: number
-  brand: string
-  model: string
-  price: string
-  thumbBase64: string
-  imgId: number
-  sizes: Array<any>
-  colors: Array<any>
-}
 
 @Component({
   selector: 'app-bike-category',

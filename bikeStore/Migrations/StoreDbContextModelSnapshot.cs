@@ -160,7 +160,7 @@ namespace BikeStore.Migrations
 
                     b.HasKey("CatId");
 
-                    b.ToTable("Categorys");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("bikeStore.Data.Entities.ImgContent", b =>
@@ -176,6 +176,8 @@ namespace BikeStore.Migrations
                     b.Property<string>("ImgContentName");
 
                     b.Property<DateTime?>("ImgCreateDt");
+
+                    b.Property<bool>("IsThumbnail");
 
                     b.Property<long>("StoreImgId");
 
@@ -245,12 +247,12 @@ namespace BikeStore.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("BikeStore.Data.Entities.Color", "Color")
-                        .WithMany("BikesColorSize")
+                        .WithMany("BikesColors")
                         .HasForeignKey("ColorId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("BikeStore.Data.Entities.Size")
-                        .WithMany("BikesColorSize")
+                        .WithMany("BikesSizes")
                         .HasForeignKey("SizeId");
                 });
 

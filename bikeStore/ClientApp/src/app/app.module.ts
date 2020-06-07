@@ -60,6 +60,7 @@ import { DragDropDirective } from './directives/drag-drop.directive';
 import { IsLoadingModule } from '@service-work/is-loading';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { ButtonRenderComponent } from './ag-render/button-render/button-render.component';
+import { DualListComponent } from './dual-list/dual-list.component';
 
 @NgModule({
   declarations: [
@@ -72,7 +73,8 @@ import { ButtonRenderComponent } from './ag-render/button-render/button-render.c
     AdminComponent,
     AdminModalComponent,
     DragDropDirective,
-    ButtonRenderComponent
+    ButtonRenderComponent,
+    DualListComponent
   ],
   entryComponents: [AdminModalComponent],
   imports: [

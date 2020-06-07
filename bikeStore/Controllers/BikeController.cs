@@ -1,24 +1,22 @@
 ﻿using AutoMapper;
 using bikeStore.Data;
 using bikeStore.Data.Entities;
-using bikeStore.Data.Extensions;
 using bikeStore.Data.Repository;
 using BikeStore.Data.Entities;
-using BikeStore.Models;
 using BikeStore.Models.Bikes;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 
 namespace bikeStore.Controllers
 {
     [ApiController]
+    [EnableCors("ApiCorsPolicy")]
     [Route("api/bikes")]
     public class BikeController : ControllerBase
     {
@@ -30,9 +28,6 @@ namespace bikeStore.Controllers
         private readonly IRepo<BikesSizes> _bikesSizesRepo;
         private readonly IRepo<StoreImages> _storeImgRepo;
         private readonly IRepo<ImgContent> _imgContentRepo;
-
-        //StoreImages
-        //ImgContent
 
         public BikeController( StoreDbContext context,
                               IBikeRepository bikeRepository, 
@@ -53,14 +48,14 @@ namespace bikeStore.Controllers
             _storeImgRepo = storeImgRepo ?? throw new ArgumentNullException(nameof(storeImgRepo));
             _imgContentRepo = imgContentRepo ?? throw new ArgumentNullException(nameof(imgContentRepo));
         }
+
         [HttpGet]
         [Route("category/{catId}")]
         public async Task<IActionResult> GetBikesByCategory(long catId)
         {
             var bikes = await _bikeRepository.GetBikesByCategoryAsync(catId);
-            if (bikes != null) 
-                return Ok(_mapper.Map<IEnumerable<Bike>, IEnumerable<BikeDTO>>(bikes));
-            else return NotFound();
+            if (bikes != null) return Ok(_mapper.Map<IEnumerable<Bike>, IEnumerable<BikeDTO>>(bikes));
+             return NotFound();
         }
 
         [HttpGet]
@@ -68,38 +63,31 @@ namespace bikeStore.Controllers
         public async Task<IActionResult> GetBike(long bikeId)
         {
             var bike = await _bikeRepository.GetBikeAsync(bikeId);
-
-
             if (bike != null)
                 return Ok(bike);
-            else return NotFound();
+            return NotFound();
         }
 
+       
         [HttpPost]
         [Route("bike")]
-        public async Task<IActionResult> CreateBike()
+        public async Task<IActionResult> CreateBike([FromForm] BikeMultiPartDTO model)
         {
             using (var transaction = _context.Database.BeginTransaction())
             {
                 try
                 {
-                    IFormFileCollection bikeImeges = Request.Form.Files;
-                    Dictionary<string, string> bikeInfo = Request.Form.ToDictionary(x => x.Key, x => x.Value.ToString());
-                    Bike bike = new Bike();
-                    StoreImages storeImage = new StoreImages();
-                    BikesColors bikesColorSize = new BikesColors();
-                    
+                    if (model != null)
+                    { 
+                        StoreImages storeImage = new StoreImages();
+                        storeImage.Description = $"Bike '{model.Bike.Brand} - {model.Bike.Model}'  image files";
+                        _storeImgRepo.Add(storeImage);
+                        await _storeImgRepo.SaveChangesAsync();
 
-                    if (bikeInfo.Count > 0)
-                    {
-                        //Save files at first
-                        if (bikeImeges.Count > 0)
+                        if (model.Files.Any())
                         {
-                            storeImage.Description = $"Bike '{bikeInfo["brand"]} - {bikeInfo["model"]}'  image files";
-                            _storeImgRepo.Add(storeImage);
-                            await _storeImgRepo.SaveChangesAsync();
-
-                            foreach (var file in bikeImeges)
+                            // save bike images
+                            foreach (var file in model.Files)
                             {
 
                                 if (file.Length > 0)
@@ -114,60 +102,121 @@ namespace bikeStore.Controllers
                                             StoreImgId = storeImage.StoreImgId,
                                             ImgCreateDt = DateTime.UtcNow,
                                             ImgContentName = file.FileName,
-                                            Content = fileBytes
+                                            Content = fileBytes,
+                                            IsThumbnail = file.FileName.Equals(model.Bike.ThumbFileName)
                                         });
                                         await _imgContentRepo.SaveChangesAsync();
                                     }
                                 }
                             }
-
                         }
+                       
 
-                        bike.Brand = bikeInfo["brand"];
-                        bike.CategoryId = long.Parse(bikeInfo["subCategoryId"]);
-                        bike.Model = bikeInfo["model"];
-                        bike.Price = bikeInfo["price"].ToDecimal();
-                        bike.IsInStock = bikeInfo["isInStock"] == "true" ? true: false;
-                        bike.ThumbBase64 = bikeInfo["thumbBase64"];
+                        Bike bike = _mapper.Map<BikeForCreation, Bike> (model.Bike);
                         bike.ImgId = storeImage.StoreImgId;
-
+                        //create new bike
                         _bikeRepository.CreateBike(bike);
                         await _bikeRepository.SaveChangesAsync();
 
-                        var colors = bikeInfo["colors"].Split(',').ToArray();
-                        var sizes = bikeInfo["sizes"].Split(',').ToArray();
-
                         // add junction with colors
-                        foreach (var colorId in colors)
-                        {
-                            _bikesColorsRepo.Add(new BikesColors() { BikeId = bike.BikeId, ColorId = long.Parse(colorId) });
-                            await _bikesColorsRepo.SaveChangesAsync();
-                        }
+                        _bikesColorsRepo.AddRange(model.Bike.Colors.Select(colorId => new BikesColors() { BikeId = bike.BikeId, ColorId = colorId }).ToList());
+                        await _bikesColorsRepo.SaveChangesAsync();
                         // add junction with sizes
-                        foreach (var sizeId in sizes)
-                        {
-                            _bikesSizesRepo.Add(new BikesSizes() { BikeId = bike.BikeId, SizeId = long.Parse(sizeId) });
-                            await _bikesSizesRepo.SaveChangesAsync();
-                        }
+                        _bikesSizesRepo.AddRange(model.Bike.Sizes.Select(sizeId => new BikesSizes() { BikeId = bike.BikeId, SizeId = sizeId}).ToList());
+                        await _bikesSizesRepo.SaveChangesAsync();
 
                         transaction.Commit();
                         return Ok();
                     }
-                    else
-                    {
-                        return BadRequest();
-                    }
+
+                    return BadRequest();
 
                 }
                 catch (Exception ex)
                 {
                     transaction.Rollback();
-                    return StatusCode(500, $"Internal server error: {ex}");
+                    return StatusCode(500, $"Internal server error: {ex.Message}");
                 }
             }
+        }
 
+      
+        [HttpPut]
+        [Route("bike")]
+        public async Task<IActionResult> UpdateBike([FromForm] BikeMultiPartDTO model)
+        {
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    if (model != null)
+                    {
+                        // update bike
+                        Bike bike = _mapper.Map<BikeForCreation, Bike>(model.Bike);
+                        _bikeRepository.UpdateBike(bike);
+                        await _bikeRepository.SaveChangesAsync();
 
-            
+                        //get exist storeImages list
+                        var storeImg = await _imgContentRepo.GetRangeByConditionAsync(i => i.StoreImgId == model.Bike.ImgId);
+                        var tempImgContent = new List<ImgContent>();
+                        if (model.Files.Any())
+                        {
+                            foreach (var file in model.Files)
+                            {
+                                if (file.Length > 0)
+                                {
+                                    using (var ms = new MemoryStream())
+                                    {
+                                        file.CopyTo(ms);
+                                        var fileBytes = ms.ToArray();
+                                        tempImgContent.Add(new ImgContent
+                                        {
+                                            ImgContentMimeType = file.ContentType,
+                                            StoreImgId = model.Bike.ImgId ?? default,
+                                            ImgCreateDt = DateTime.UtcNow,
+                                            ImgContentName = file.FileName,
+                                            Content = fileBytes,
+                                            IsThumbnail = file.FileName.Equals(model.Bike.ThumbFileName)
+                                        });
+
+                                    }
+                                }
+                            }
+                        }
+                            
+                        //assign new list of images, all existing images will be replaced
+                        _imgContentRepo.DeleteRange(storeImg);
+                        _imgContentRepo.AddRange(tempImgContent);
+                        //storeImg.ImgContents = tempImgContent;
+                        await _imgContentRepo.SaveChangesAsync();
+
+                        // delete all exist  and create new colors junction
+                        var existBikesColors = await _bikesColorsRepo.GetRangeByConditionAsync(c => c.BikeId == bike.BikeId);
+                        _bikesColorsRepo.DeleteRange(existBikesColors);
+                        await _bikesColorsRepo.SaveChangesAsync();
+                        _bikesColorsRepo.AddRange(model.Bike.Colors.Select(colorId => new BikesColors() { BikeId = bike.BikeId, ColorId = colorId }).ToList());
+                        await _bikesColorsRepo.SaveChangesAsync();
+
+                        // delete all exist  and create new sizes junction
+                        var existBikesSizes = await _bikesSizesRepo.GetRangeByConditionAsync(s => s.BikeId == bike.BikeId);
+                        _bikesSizesRepo.DeleteRange(existBikesSizes);
+                        await _bikesSizesRepo.SaveChangesAsync();
+                        _bikesSizesRepo.AddRange(model.Bike.Sizes.Select(sizeId => new BikesSizes() { BikeId = bike.BikeId, SizeId = sizeId }).ToList());
+                        await _bikesSizesRepo.SaveChangesAsync();
+
+                        transaction.Commit();
+                        return Ok();
+                    }
+
+                    return BadRequest();
+
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    return StatusCode(500, $"Internal server error: {ex.Message}");
+                }
+            }
         }
     }
 }

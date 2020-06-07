@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using AutoMapper;
+using BikeStore.Data.Attributes;
 using BikeStore.Models.Bikes;
 using BikeStore.Data.Repository;
 using BikeStore.Models.Categories;
@@ -15,6 +16,7 @@ using BikeStore.Data.Entities;
 using BikeStore.Models.Dictionaries;
 using BikeStore.Models.Specifications;
 using bikeStore.Data.Entities;
+using BikeStore.Models.Admin;
 using Microsoft.AspNetCore.Http.Features;
 
 namespace bikeStore
@@ -33,9 +35,21 @@ namespace bikeStore
         {
             
             services.AddDbContext<StoreDbContext>(cfg => { cfg.UseSqlServer(Configuration.GetConnectionString("StoreConnectionString")); });
-
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                    .AddJsonOptions( options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            //services.AddCors("ApiCorsPolicy", new EnableCorsAttribute("*", "*", "*"));
+            services.AddCors(options => options.AddPolicy("ApiCorsPolicy", policy =>
+            {
+                var corsUrlSection = Configuration.GetSection("AllowedOrigins");
+                var corsUrls = corsUrlSection.Get<string[]>();
+                policy.WithOrigins(corsUrls)
+                    .AllowAnyMethod()
+                    //.WithExposedHeaders("X-Pagination")
+                    .AllowAnyHeader();
+            }));
+            
+            services.AddMvc(properties =>
+                    properties.ModelBinderProviders.Insert(0, new JsonModelBinderProvider()))
+                    .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                    .AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             #region Dependency Injection Config
             services.AddScoped(typeof(IRepo<>), typeof(BaseRepo<>));
@@ -60,6 +74,8 @@ namespace bikeStore
                 mc.AddProfile(new SizeProfile());
                 mc.AddProfile(new SpecificationCategoryProfile());
                 mc.AddProfile(new SpecificationProfile());
+                mc.AddProfile(new FileImgProfile());
+                mc.AddProfile(new BikeForCreationProfile());
             });
             #endregion
 
@@ -73,8 +89,8 @@ namespace bikeStore
 
             // To avoid the MultiPartBodyLength error
             services.Configure<FormOptions>(o => {
-                o.ValueLengthLimit = 1024;
-                o.MultipartBodyLengthLimit = 2500000;
+                o.ValueLengthLimit = 1024 * 2 ;
+                o.MultipartBodyLengthLimit = 250000000;
                 o.MemoryBufferThreshold = 1024 * 1024 * 4;
             });
         }
@@ -93,9 +109,16 @@ namespace bikeStore
                 app.UseHsts();
             }
 
+            //app.UseCors(builder => builder
+            //    .AllowAnyOrigin()
+            //    .AllowAnyMethod()
+            //    .AllowAnyHeader()
+            //    .AllowCredentials());
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+            app.UseCors("ApiCorsPolicy");
 
             app.UseMvc(routes =>
             {

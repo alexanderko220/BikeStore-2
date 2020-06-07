@@ -6,13 +6,9 @@ import { MatDialogRef } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { Inject } from '@angular/core';
-import { IBikeCreation } from '../admin.component';
 import { IsLoadingService } from '@service-work/is-loading';
-
-export interface IDictionaryConainer {
-  id: any,
-  value: string
-}
+import { FileHelperService } from '../../services/fileHelper.service';
+import { IDictionaryConainer, IBikeCreation, IFile } from "../../interfaces/interfaces";
 
 
 @Component({
@@ -26,8 +22,6 @@ export class AdminModalComponent implements OnInit {
   //#region Params
 
   fileArr: any = [];
-  imgArr: any = [];
-  fileObj: any = [];
   form: FormGroup;
   colors: IDictionaryConainer[] = [];
   sizes: IDictionaryConainer[] = [];
@@ -41,7 +35,9 @@ export class AdminModalComponent implements OnInit {
     private dialogRef: MatDialogRef<AdminModalComponent>,
     private sanitizer: DomSanitizer,
     @Inject(MAT_DIALOG_DATA) private modalData: any,
-    private isLoadingService: IsLoadingService) {
+    private loadingService: IsLoadingService,
+    private fileService: FileHelperService
+  ) {
 
    
     this.form = fb.group({
@@ -49,7 +45,7 @@ export class AdminModalComponent implements OnInit {
       subCategory: new FormControl(null, Validators.required),
       model: new FormControl(null, Validators.required),
       brand: new FormControl(null, Validators.required),
-      price: new FormControl(null, [Validators.required, Validators.pattern(/(^\d+([,.]\d+)?$)|((^\d{1,3}(,\d{3})+(\.\d+)?)$)|((^\d{1,3}(\.\d{3})+(,\d+)?)$)/)]),
+      price: new FormControl(null, [Validators.required, Validators.pattern(/^(\d*([.,](?=\d{3}))?\d+)+((?!\2)[.,]\d\d)?$/)]),
       isInStock: new FormControl(null),
       hideRequiredControl: new FormControl(false),
       floatLabelControl: new FormControl('auto'),
@@ -61,32 +57,39 @@ export class AdminModalComponent implements OnInit {
   //#endregion Params
 
   //#region Helpers
-  
+
+  fillFileArray(images: IFile[]) {
+    for (let i = 0; i < images.length; i++) {
+      const blob = this.fileService.b64ToBlob(images[i].base64String, images[i].fileType);
+      const url = URL.createObjectURL(blob);
+      this.fileArr.push({ item: new File([blob], images[i].fileName, { type: images[i].fileType }), url: url, isThumbImg: images[i].isThumbnail});
+    }
+  }
+
   //#endregion Helpers
 
   onCategoryChange(catId: number) {
     if (catId) {
 
-      this.bike.subCategoryId = null;
+      this.bike.categoryId = null;
 
       this.http.get<IDictionaryConainer[]>("api/admin/category/" + catId)
         .subscribe(response => {
           this.subCategories = response;
-          console.log(this.subCategories);
+          //console.log(this.subCategories);
         });
     }  
   }
 
   uploadFile(e) {
 
-    const fileListAsArray : File[] = Array.from(e);
+    const fileListAsArray: File[] = Array.from(e);
     fileListAsArray.forEach((item, i) => {
 
       if (item.type.indexOf('image/') >= 0) {
         const file = (e as HTMLInputElement);
         const url = URL.createObjectURL(file[i]);
-        this.imgArr.push(url);
-        this.fileArr.push({ item, url: url, isThumbImg: false });
+        this.fileArr.push({ item, url: url, isThumbImg: false});
       } 
       
     })
@@ -99,7 +102,7 @@ export class AdminModalComponent implements OnInit {
   }
 
   deleteAttachment(index) {
-    this.fileArr.splice(index, 1)
+    this.fileArr.splice(index, 1);
   }
 
   setAsThumbImg(index) {
@@ -125,29 +128,58 @@ export class AdminModalComponent implements OnInit {
     const r1 = this.http.get<IDictionaryConainer[]>("api/admin/color")
       .subscribe(response => {
                    this.colors = response;
-                });
+      });
+    this.loadingService.add(r1);
+
     const r2 = this.http.get<IDictionaryConainer[]>("api/admin/size")
       .subscribe(response => {
                   this.sizes =  response;
-                });
+      });
+    this.loadingService.add(r2);
     const r3 = this.http.get<IDictionaryConainer[]>("api/admin/category")
       .subscribe(response => {
         this.categories = response;
-                });
+      });
+    this.loadingService.add(r3);
     return forkJoin([r1, r2, r3]);
 
   }
 
+  initSubCategory(mainId: number) {
+    if (mainId) {
+
+      const s1 = this.http.get<IDictionaryConainer[]>("api/admin/category/" + mainId)
+        .subscribe(response => {
+          this.subCategories = response;
+        });
+      this.loadingService.add(s1);
+    }
+  }
+
+  initImages(storeImgId: number): Observable<any> {
+    const r1 = this.http.get<IFile[]>("api/admin/img/" + storeImgId).subscribe(images => {
+      if (images && images.length > 0) {
+        this.fillFileArray(images);
+      }
+       
+    });
+    this.loadingService.add(r1);
+    return forkJoin([r1]);
+  }
+
   ngOnInit() {
     this.bike = Object.assign({}, this.modalData.data);
-    this.isLoadingService.add(this.initDictionaries());
+    this.initDictionaries();
     
     if (this.modalData.isEdit) {
       this.title = 'Edit bike';
-      this.onCategoryChange(this.bike.mainCategoryId);
+      this.initSubCategory(this.bike.mainCategoryId);
+      this.initImages(this.bike.imgId);
+     
     } else {
       this.title = 'Create bike';
     }
+
   }
 
   //#endregion Init
